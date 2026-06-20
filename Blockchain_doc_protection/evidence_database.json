@@ -1,0 +1,59 @@
+{
+  "EVD_DEMO001": {
+    "evidence_id": "EVD_DEMO001",
+    "original_filename": "sample_document.pdf",
+    "file_hash": "a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456",
+    "uploader": "admin",
+    "timestamp": "2025-09-11T10:30:00",
+    "description": "Sample legal document for demonstration purposes",
+    "tags": [
+      "legal",
+      "contract",
+      "demo",
+      "sample"
+    ],
+    "file_size": 1024576,
+    "blockchain_hash": "0x1234567890abcdef1234567890abcdef12345678",
+    "ipfs_hash": "QmSampleHashForDemonstrationPurposes123456789",
+    "verification_status": "verified",
+    "audit_trail": []
+  },
+  "EVD_DEMO002": {
+    "evidence_id": "EVD_DEMO002",
+    "original_filename": "crime_scene_photo.jpg",
+    "file_hash": "b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456a1",
+    "uploader": "demo",
+    "timestamp": "2025-09-11T11:15:00",
+    "description": "Digital photograph from crime scene investigation",
+    "tags": [
+      "photo",
+      "crime-scene",
+      "investigation",
+      "digital-forensics"
+    ],
+    "file_size": 2048000,
+    "blockchain_hash": "0xabcdef1234567890abcdef1234567890abcdef12",
+    "ipfs_hash": "QmAnotherSampleHashForPhotoDemonstration987654",
+    "verification_status": "verified",
+    "audit_trail": []
+  },
+  "EVD_DEMO003": {
+    "evidence_id": "EVD_DEMO003",
+    "original_filename": "witness_statement.docx",
+    "file_hash": "c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456a1b2",
+    "uploader": "admin",
+    "timestamp": "2025-09-11T14:45:00",
+    "description": "Witness statement document with digital signature",
+    "tags": [
+      "witness",
+      "statement",
+      "legal",
+      "signature"
+    ],
+    "file_size": 512000,
+    "blockchain_hash": "0x567890abcdef1234567890abcdef1234567890ab",
+    "ipfs_hash": "QmWitnessStatementHashExample123456789ABCDEF",
+    "verification_status": "verified",
+    "audit_trail": []
+  }
+}

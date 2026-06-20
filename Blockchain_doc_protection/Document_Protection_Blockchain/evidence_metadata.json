@@ -1,0 +1,202 @@
+{
+  "EV_1757680793_636520e6": {
+    "evidence_id": "EV_1757680793_636520e6",
+    "filename": "rr.pdf",
+    "file_hash": "73c37b262dfc80f0b2383c5a8ca40c805723ae496e82324da68fa6902e53065a",
+    "ipfs_hash": null,
+    "uploader": "Anand",
+    "upload_timestamp": "2025-09-12T18:09:53.988606",
+    "description": "the secured document uploaded for the testing purpose ",
+    "tags": [
+      "Document"
+    ],
+    "file_size": 274671,
+    "access_history": [
+      {
+        "user": "admin",
+        "timestamp": "2025-09-15T10:52:17.234610",
+        "action": "viewed",
+        "user_role": "admin"
+      },
+      {
+        "user": "admin",
+        "timestamp": "2025-09-15T10:58:17.170362",
+        "action": "viewed",
+        "user_role": "admin"
+      }
+    ],
+    "verification_status": "invalid",
+    "blockchain_stored": true,
+    "qr_code_generated": true,
+    "qr_code_path": "static/qrcode\\EV_1757680793_636520e6_qr.png",
+    "blockchain_tx_hash": "stored",
+    "verified_by": "admin",
+    "verified_at": "2025-09-15T10:58:25.338321",
+    "verification_notes": ""
+  },
+  "EV_1757749039_01c2c80b": {
+    "evidence_id": "EV_1757749039_01c2c80b",
+    "filename": "img_placeholder_dashboard.png",
+    "file_hash": "c1683521498076dac4b651f9e7a3296132e35af4c54f0b6656d4e00d9aa81737",
+    "ipfs_hash": null,
+    "uploader": "Anand",
+    "upload_timestamp": "2025-09-13T13:07:19.981944",
+    "description": "kljhjg",
+    "tags": [
+      "money"
+    ],
+    "file_size": 2876,
+    "access_history": [],
+    "verification_status": "pending",
+    "blockchain_stored": false,
+    "qr_code_generated": true,
+    "qr_code_path": "static/qrcode\\EV_1757749039_01c2c80b_qr.png"
+  },
+  "EV_1757749269_b6fa1a9d": {
+    "evidence_id": "EV_1757749269_b6fa1a9d",
+    "filename": "QR_Anand.png",
+    "file_hash": "930de10f782cec205eb325229e5e34a0fec604a26e4b9790efba9e624105a300",
+    "ipfs_hash": null,
+    "uploader": "Anand",
+    "upload_timestamp": "2025-09-13T13:11:09.549893",
+    "description": "qr code",
+    "tags": [
+      "qr code"
+    ],
+    "file_size": 852,
+    "access_history": [],
+    "verification_status": "pending",
+    "blockchain_stored": true,
+    "qr_code_generated": true,
+    "qr_code_path": "static/qrcode\\EV_1757749269_b6fa1a9d_qr.png",
+    "blockchain_tx_hash": "stored"
+  },
+  "EV_1757756591_c48c7a61": {
+    "evidence_id": "EV_1757756591_c48c7a61",
+    "filename": "img_placeholder_app_dark.png",
+    "file_hash": "4a150f0615bca1ded67399572eecd163d68a9edbf628ff96a418423132432479",
+    "ipfs_hash": "QmRv7VrnDmNfpj31s8Gvqh8fD3raEiLXFzJzg3CNamJth2",
+    "uploader": "Anand",
+    "upload_timestamp": "2025-09-13T15:13:11.716175",
+    "description": "sfs",
+    "tags": [
+      "Document"
+    ],
+    "file_size": 4707,
+    "access_history": [],
+    "verification_status": "pending",
+    "blockchain_stored": false,
+    "qr_code_generated": true,
+    "qr_code_path": "static/qrcode\\EV_1757756591_c48c7a61_qr.png"
+  },
+  "EV_1757756766_59265921": {
+    "evidence_id": "EV_1757756766_59265921",
+    "filename": "address.jpeg",
+    "file_hash": "a8c43fea1288c745a5feefcc759a61ac21f947a36ebdb1be8cbc7437e08b266d",
+    "ipfs_hash": "QmQp6cRwgTV9FwiQxYSv9rft2DMQkbcNUt3wf9udyehBDV",
+    "uploader": "Anand",
+    "upload_timestamp": "2025-09-13T15:16:06.544159",
+    "description": "address",
+    "tags": [
+      "Document"
+    ],
+    "file_size": 27468,
+    "access_history": [
+      {
+        "user": "admin",
+        "timestamp": "2025-09-15T10:51:58.555388",
+        "action": "viewed",
+        "user_role": "admin"
+      }
+    ],
+    "verification_status": "fake",
+    "blockchain_stored": false,
+    "qr_code_generated": true,
+    "qr_code_path": "static/qrcode\\EV_1757756766_59265921_qr.png",
+    "verified_by": "admin",
+    "verified_at": "2025-09-15T10:51:50.692454",
+    "verification_notes": "fake\r\n"
+  },
+  "EV_1757764291_f41504d4": {
+    "evidence_id": "EV_1757764291_f41504d4",
+    "filename": "address.jpeg",
+    "file_hash": "a8c43fea1288c745a5feefcc759a61ac21f947a36ebdb1be8cbc7437e08b266d",
+    "ipfs_hash": null,
+    "uploader": "Anand",
+    "upload_timestamp": "2025-09-13T17:21:31.032521",
+    "description": "address",
+    "tags": [
+      "address"
+    ],
+    "file_size": 27468,
+    "access_history": [
+      {
+        "user": "Anand",
+        "timestamp": "2025-09-13T17:23:29.674947",
+        "action": "viewed",
+        "user_role": "investigator"
+      },
+      {
+        "user": "Anand",
+        "timestamp": "2025-09-13T17:25:25.138513",
+        "action": "viewed",
+        "user_role": "investigator"
+      },
+      {
+        "user": "Anand",
+        "timestamp": "2025-09-13T17:33:57.788405",
+        "action": "viewed",
+        "user_role": "investigator"
+      },
+      {
+        "user": "Anand",
+        "timestamp": "2025-09-13T17:36:19.696582",
+        "action": "viewed",
+        "user_role": "investigator"
+      },
+      {
+        "user": "Anand",
+        "timestamp": "2025-09-13T17:50:42.827502",
+        "action": "viewed",
+        "user_role": "investigator"
+      },
+      {
+        "user": "admin",
+        "timestamp": "2025-09-15T10:17:16.705340",
+        "action": "viewed",
+        "user_role": "admin"
+      },
+      {
+        "user": "admin",
+        "timestamp": "2025-09-15T10:17:35.519330",
+        "action": "viewed",
+        "user_role": "admin"
+      },
+      {
+        "user": "admin",
+        "timestamp": "2025-09-15T10:51:12.733592",
+        "action": "viewed",
+        "user_role": "admin"
+      },
+      {
+        "user": "Anand",
+        "timestamp": "2025-09-15T11:02:47.570266",
+        "action": "viewed",
+        "user_role": "investigator"
+      },
+      {
+        "user": "Anand",
+        "timestamp": "2025-09-15T18:48:43.293849",
+        "action": "viewed",
+        "user_role": "investigator"
+      }
+    ],
+    "verification_status": "valid",
+    "blockchain_stored": false,
+    "qr_code_generated": true,
+    "qr_code_path": "static/qrcode\\EV_1757764291_f41504d4_qr.png",
+    "verified_by": "Anand",
+    "verified_at": "2025-09-13T17:24:52.962993",
+    "verification_notes": ""
+  }
+}

@@ -1,0 +1,24 @@
+# Blockchain Document Protection System Requirements
+# Core web framework
+Flask==2.3.3
+
+# QR code generation
+qrcode[pil]==7.4.2
+pyqrcode==1.2.1
+pypng==0.20220715.0
+
+# Image processing
+Pillow==10.0.1
+
+# Optional: Blockchain integration
+web3==6.8.0
+
+# Optional: IPFS integration
+ipfshttpclient==0.8.0a2
+
+# Optional: Advanced cryptography
+pycryptodome==3.18.0
+
+# Standard library dependencies (usually included with Python)
+# - json, hashlib, os, datetime, time, secrets, base64, io, smtplib
+# - email.mime modules

@@ -1,0 +1,26 @@
+{
+  "admin": {
+    "password": "admin123",
+    "email": "parmydevelopment.in@gmail.com",
+    "role": "admin",
+    "created_at": "2025-09-12T17:40:03.954238"
+  },
+  "investigator": {
+    "password": "investigator123",
+    "email": "ankillaanand@gmail.com",
+    "role": "investigator",
+    "created_at": "2025-09-12T17:40:03.954238"
+  },
+  "demo": {
+    "password": "demo123",
+    "email": "parmydevelopment.in@gmail.com",
+    "role": "user",
+    "created_at": "2025-09-12T17:40:03.954238"
+  },
+  "viewer": {
+    "password": "viewer123",
+    "email": "parmydevelopment.in@gmail.com",
+    "role": "viewer",
+    "created_at": "2025-09-12T17:40:03.954238"
+  }
+}

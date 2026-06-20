@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evidence Audit Trail - Document Protection using Blockchain Technology</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='templatemo_style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .audit-container {
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 30px;
+        }
+        
+        .evidence-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        
+        .evidence-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .evidence-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f8f9fa;
+        }
+        
+        .evidence-id {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+        
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-valid { background: #d4edda; color: #155724; }
+        .status-invalid { background: #f8d7da; color: #721c24; }
+        .status-fake { background: #f5c6cb; color: #721c24; }
+        
+        .evidence-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .detail-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .detail-label {
+            font-weight: bold;
+            color: #495057;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .detail-value {
+            color: #212529;
+            word-break: break-all;
+        }
+        
+        .verification-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .btn-verify {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-verify:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+        
+        .btn-invalid {
+            background: linear-gradient(135deg, #dc3545, #fd7e14);
+        }
+        
+        .btn-fake {
+            background: linear-gradient(135deg, #6c757d, #343a40);
+        }
+        
+        .filter-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .modal-content {
+            border-radius: 15px;
+        }
+        
+        .activity-log {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .activity-item {
+            padding: 10px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .encrypted-text {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+            color: #6c757d;
+        }
+        
+        .qr-access-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .qr-access-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .qr-access-btn:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div id="templatemo_header_wrapper">
+        <div id="templatemo_header">
+            <div id="title">
+                Document Protection using Blockchain Technology
+            </div>
+        </div>
+    </div>
+
+    <div class="audit-container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="fas fa-clipboard-list me-2"></i>Evidence Audit Trail</h2>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+            </a>
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="stats-section">
+            <div class="stat-card">
+                <div class="stat-number">{{ all_evidence|length }}</div>
+                <div class="stat-label">Total Evidence</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ all_evidence|selectattr('verification_status', 'equalto', 'valid')|list|length }}</div>
+                <div class="stat-label">Verified Valid</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ all_evidence|selectattr('verification_status', 'equalto', 'pending')|list|length }}</div>
+                <div class="stat-label">Pending Review</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ all_evidence|selectattr('verification_status', 'equalto', 'invalid')|list|length + all_evidence|selectattr('verification_status', 'equalto', 'fake')|list|length }}</div>
+                <div class="stat-label">Issues Found</div>
+            </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <h4><i class="fas fa-filter me-2"></i>Filter Evidence</h4>
+            <div class="row">
+                <div class="col-md-3">
+                    <select class="form-select" id="statusFilter">
+                        <option value="">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="valid">Valid</option>
+                        <option value="invalid">Invalid</option>
+                        <option value="fake">Fake</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" id="searchFilter" placeholder="Search by filename...">
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="uploaderFilter">
+                        <option value="">All Uploaders</option>
+                        {% set uploaders = [] %}
+                        {% for evidence in all_evidence %}
+                            {% if evidence.uploader not in uploaders %}
+                                {% set uploaders = uploaders + [evidence.uploader] %}
+                            {% endif %}
+                        {% endfor %}
+                        {% for uploader in uploaders %}
+                            <option value="{{ uploader }}">{{ uploader }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-primary w-100" onclick="resetFilters()">
+                        <i class="fas fa-undo me-2"></i>Reset Filters
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Evidence List -->
+        <div id="evidenceList">
+            {% for evidence in all_evidence %}
+            <div class="evidence-card" data-status="{{ evidence.verification_status }}" data-filename="{{ evidence.filename }}" data-uploader="{{ evidence.uploader }}">
+                <div class="evidence-header">
+                    <div>
+                        <div class="evidence-id">{{ evidence.evidence_id }}</div>
+                        <small class="text-muted">{{ evidence.filename }}</small>
+                    </div>
+                    <div class="text-end">
+                        <span class="status-badge status-{{ evidence.verification_status }}">
+                            {{ evidence.verification_status|title }}
+                        </span>
+                        {% if evidence.blockchain_stored %}
+                        <div class="mt-1">
+                            <i class="fas fa-link text-success" title="Stored on Blockchain"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="evidence-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Uploader</div>
+                        <div class="detail-value">
+                            {% if user_role == 'admin' %}
+                                {{ evidence.uploader }}
+                            {% else %}
+                                <span class="encrypted-text">{{ evidence.uploader[:2] }}****{{ evidence.uploader[-2:] if evidence.uploader|length > 4 else '' }}</span>
+                                <i class="fas fa-lock text-warning ms-1" title="Encrypted for security"></i>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Upload Date</div>
+                        <div class="detail-value">{{ evidence.upload_timestamp }}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">File Size</div>
+                        <div class="detail-value">{{ evidence.file_size|filesizeformat }}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">File Hash</div>
+                        <div class="detail-value">
+                            <span class="encrypted-text">{{ evidence.file_hash[:8] }}****{{ evidence.file_hash[-8:] }}</span>
+                            <i class="fas fa-lock text-warning ms-1" title="Encrypted for security"></i>
+                        </div>
+                    </div>
+                </div>
+
+                {% if evidence.description %}
+                <div class="mb-3">
+                    <strong>Description:</strong> {{ evidence.description }}
+                </div>
+                {% endif %}
+
+                {% if evidence.verification_status == 'pending' and user_role == 'admin' %}
+                <div class="verification-section">
+                    <h5><i class="fas fa-check-circle me-2"></i>Admin Verification</h5>
+                    <div class="d-flex flex-wrap gap-2">
+                        <button class="btn btn-verify" onclick="verifyEvidence('{{ evidence.evidence_id }}', 'valid')">
+                            <i class="fas fa-check me-2"></i>Mark as Valid
+                        </button>
+                        <button class="btn btn-invalid" onclick="verifyEvidence('{{ evidence.evidence_id }}', 'invalid')">
+                            <i class="fas fa-times me-2"></i>Mark as Invalid
+                        </button>
+                        <button class="btn btn-fake" onclick="verifyEvidence('{{ evidence.evidence_id }}', 'fake')">
+                            <i class="fas fa-exclamation-triangle me-2"></i>Mark as Fake
+                        </button>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if evidence.verified_by %}
+                <div class="mt-3 p-3 bg-light rounded">
+                    <small>
+                        <strong>Verified by:</strong> {{ evidence.verified_by }} on {{ evidence.verified_at }}
+                        {% if evidence.verification_notes %}
+                        <br><strong>Notes:</strong> {{ evidence.verification_notes }}
+                        {% endif %}
+                    </small>
+                </div>
+                {% endif %}
+
+                <!-- Action Buttons Section - Admin Only -->
+                {% if user_role == 'admin' %}
+                <div class="action-buttons-section">
+                    <h6 class="mb-3">
+                        <i class="fas fa-tools me-2"></i>
+                        Admin Evidence Management
+                    </h6>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="{{ url_for('view_evidence', evidence_id=evidence.evidence_id) }}?from_audit_trail=1"
+                           class="btn btn-primary btn-sm">
+                            <i class="fas fa-eye me-1"></i>View Details
+                        </a>
+                        <button class="btn btn-warning btn-sm" onclick="modifyEvidenceFromAudit('{{ evidence.evidence_id }}')">
+                            <i class="fas fa-edit me-1"></i>Modify
+                        </button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteEvidenceFromAudit('{{ evidence.evidence_id }}')">
+                            <i class="fas fa-trash me-1"></i>Delete
+                        </button>
+                        <button class="btn btn-info btn-sm" onclick="downloadEvidenceFromAudit('{{ evidence.evidence_id }}')">
+                            <i class="fas fa-download me-1"></i>Download
+                        </button>
+                        <button class="btn btn-success btn-sm" onclick="shareQRFromAudit('{{ evidence.evidence_id }}')">
+                            <i class="fas fa-share me-1"></i>Share QR
+                        </button>
+                        {% if evidence.verification_status == 'pending' %}
+                        <div class="d-flex flex-wrap gap-1 mt-2">
+                            <button class="btn btn-outline-success btn-xs" onclick="verifyEvidence('{{ evidence.evidence_id }}', 'valid')">
+                                <i class="fas fa-check"></i> Valid
+                            </button>
+                            <button class="btn btn-outline-danger btn-xs" onclick="verifyEvidence('{{ evidence.evidence_id }}', 'invalid')">
+                                <i class="fas fa-times"></i> Invalid
+                            </button>
+                            <button class="btn btn-outline-warning btn-xs" onclick="verifyEvidence('{{ evidence.evidence_id }}', 'fake')">
+                                <i class="fas fa-exclamation-triangle"></i> Fake
+                            </button>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% else %}
+                <!-- Non-admin users see limited options -->
+                <div class="action-buttons-section">
+                    <h6 class="mb-3">
+                        <i class="fas fa-eye me-2"></i>
+                        Evidence Access
+                    </h6>
+                    <div class="d-flex flex-wrap gap-2">
+                        <button class="btn btn-info btn-sm" onclick="downloadEvidenceFromAudit('{{ evidence.evidence_id }}')">
+                            <i class="fas fa-download me-1"></i>Download
+                        </button>
+                        <button class="btn btn-success btn-sm" onclick="shareQRFromAudit('{{ evidence.evidence_id }}')">
+                            <i class="fas fa-share me-1"></i>Share QR
+                        </button>
+                        {% if user_role == 'investigator' and evidence.uploader == username %}
+                        <a href="{{ url_for('view_evidence', evidence_id=evidence.evidence_id) }}?from_audit_trail=1"
+                           class="btn btn-primary btn-sm">
+                            <i class="fas fa-eye me-1"></i>View Details
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- QR Access Section (fallback for limited users) -->
+                {% if user_role == 'viewer' %}
+                <div class="qr-access-section mt-3">
+                    <h6 class="mb-3">
+                        <i class="fas fa-qrcode me-2"></i>
+                        Secure Access Control
+                    </h6>
+                    <p class="mb-3 opacity-75">
+                        Scan the QR code associated with this evidence to view details.
+                    </p>
+                    <button class="qr-access-btn" onclick="scanQRAccess('{{ evidence.evidence_id }}')">
+                        <i class="fas fa-qrcode me-2"></i>
+                        Scan QR for Access
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if not all_evidence %}
+        <div class="text-center py-5">
+            <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+            <h4>No Evidence Found</h4>
+            <p class="text-muted">No evidence has been uploaded yet.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Verification Modal -->
+    <div class="modal fade" id="verificationModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Verify Evidence</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="verificationForm">
+                        <input type="hidden" id="verifyEvidenceId" name="evidence_id">
+                        <input type="hidden" id="verifyStatus" name="status">
+                        
+                        <div class="mb-3">
+                            <label for="verificationNotes" class="form-label">Verification Notes (Optional)</label>
+                            <textarea class="form-control" id="verificationNotes" name="notes" rows="3" 
+                                      placeholder="Add any notes about this verification..."></textarea>
+                        </div>
+                        
+                        <div class="alert alert-info">
+                            <strong>Action:</strong> <span id="actionText"></span>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="submitVerification()">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentEvidenceId = '';
+        let currentStatus = '';
+
+        function verifyEvidence(evidenceId, status) {
+            currentEvidenceId = evidenceId;
+            currentStatus = status;
+            
+            document.getElementById('verifyEvidenceId').value = evidenceId;
+            document.getElementById('verifyStatus').value = status;
+            
+            let actionText = '';
+            switch(status) {
+                case 'valid':
+                    actionText = 'Mark this evidence as VALID';
+                    break;
+                case 'invalid':
+                    actionText = 'Mark this evidence as INVALID';
+                    break;
+                case 'fake':
+                    actionText = 'Mark this evidence as FAKE';
+                    break;
+            }
+            
+            document.getElementById('actionText').textContent = actionText;
+            document.getElementById('verificationNotes').value = '';
+            
+            new bootstrap.Modal(document.getElementById('verificationModal')).show();
+        }
+
+        function submitVerification() {
+            const formData = new FormData(document.getElementById('verificationForm'));
+            
+            fetch(`/verify_evidence_status/${currentEvidenceId}`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Evidence verification updated successfully!');
+                    location.reload();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while verifying evidence.');
+            });
+            
+            bootstrap.Modal.getInstance(document.getElementById('verificationModal')).hide();
+        }
+
+        function resetFilters() {
+            document.getElementById('statusFilter').value = '';
+            document.getElementById('searchFilter').value = '';
+            document.getElementById('uploaderFilter').value = '';
+            filterEvidence();
+        }
+
+        function filterEvidence() {
+            const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
+            const searchFilter = document.getElementById('searchFilter').value.toLowerCase();
+            const uploaderFilter = document.getElementById('uploaderFilter').value.toLowerCase();
+            
+            const evidenceCards = document.querySelectorAll('.evidence-card');
+            
+            evidenceCards.forEach(card => {
+                const status = card.dataset.status.toLowerCase();
+                const filename = card.dataset.filename.toLowerCase();
+                const uploader = card.dataset.uploader.toLowerCase();
+                
+                const statusMatch = !statusFilter || status === statusFilter;
+                const searchMatch = !searchFilter || filename.includes(searchFilter);
+                const uploaderMatch = !uploaderFilter || uploader === uploaderFilter;
+                
+                if (statusMatch && searchMatch && uploaderMatch) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Add event listeners for filters
+        document.getElementById('statusFilter').addEventListener('change', filterEvidence);
+        document.getElementById('searchFilter').addEventListener('input', filterEvidence);
+        document.getElementById('uploaderFilter').addEventListener('change', filterEvidence);
+
+        // Initialize filters
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set initial uploaders list
+            const uploaders = new Set();
+            document.querySelectorAll('.evidence-card').forEach(card => {
+                uploaders.add(card.dataset.uploader);
+            });
+        });
+
+        function scanQRAccess(evidenceId) {
+            // Check if QR scanner is available
+            if (typeof startQRScan !== 'function') {
+                alert('QR scanner not available. Please use the QR scanner from the dashboard.');
+                return;
+            }
+            
+            // Store the evidence ID for access control
+            sessionStorage.setItem('qr_access_evidence_id', evidenceId);
+            
+            // Show scanning instructions
+            Swal.fire({
+                title: 'Scan QR Code for Access',
+                html: `
+                    <div class="text-center">
+                        <i class="fas fa-qrcode fa-3x text-primary mb-3"></i>
+                        <p>Please scan the QR code associated with evidence <strong>${evidenceId}</strong></p>
+                        <p class="text-muted">Only the correct QR code will grant access to view, modify, or delete this evidence.</p>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'Start Scanning',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirect to QR scanner page
+                    window.location.href = '{{ url_for("scan_qr") }}';
+                }
+            });
+        }
+
+        // Helper function to fetch evidence metadata
+        async function fetchEvidenceMetadata(evidenceId) {
+            try {
+                const response = await fetch(`/api/get_evidence_metadata/${evidenceId}`);
+                const data = await response.json();
+                return data.metadata || {};
+            } catch (error) {
+                console.error('Error fetching metadata:', error);
+                return {};
+            }
+        }
+
+        // New functions for direct evidence management from audit trail
+        async function modifyEvidenceFromAudit(evidenceId) {
+            const metadata = await fetchEvidenceMetadata(evidenceId);
+            
+            Swal.fire({
+                title: 'Modify Evidence',
+                html: `
+                    <div class="text-center mb-3">
+                        <i class="fas fa-edit fa-2x text-warning mb-3"></i>
+                        <p>What would you like to modify?</p>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-primary" onclick="modifyDescriptionFromAudit('${evidenceId}')">
+                            <i class="fas fa-comment me-2"></i>Edit Description
+                        </button>
+                        <button class="btn btn-outline-info" onclick="modifyTagsFromAudit('${evidenceId}')">
+                            <i class="fas fa-tags me-2"></i>Edit Tags
+                        </button>
+                        <button class="btn btn-outline-secondary" onclick="modifyMetadataFromAudit('${evidenceId}')">
+                            <i class="fas fa-info-circle me-2"></i>Edit Metadata
+                        </button>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'Close',
+                showConfirmButton: false,
+                cancelButtonText: 'Cancel'
+            });
+        }
+
+        async function modifyDescriptionFromAudit(evidenceId) {
+            const metadata = await fetchEvidenceMetadata(evidenceId);
+            const currentDescription = metadata.description || '';
+            
+            Swal.fire({
+                title: 'Edit Description',
+                input: 'textarea',
+                inputLabel: 'Evidence Description',
+                inputValue: currentDescription,
+                inputPlaceholder: 'Enter a description for this evidence...',
+                showCancelButton: true,
+                confirmButtonText: 'Update',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed && result.value !== currentDescription) {
+                    fetch(`/api/modify_evidence/${evidenceId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ description: result.value })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                title: 'Description Updated!',
+                                text: data.message,
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Update Failed',
+                                text: data.message,
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Failed to update description. Please try again.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    });
+                }
+            });
+        }
+
+        async function modifyTagsFromAudit(evidenceId) {
+            const metadata = await fetchEvidenceMetadata(evidenceId);
+            const currentTags = metadata.tags ? metadata.tags.join(', ') : '';
+            
+            Swal.fire({
+                title: 'Edit Tags',
+                input: 'text',
+                inputLabel: 'Tags (comma-separated)',
+                inputValue: currentTags,
+                inputPlaceholder: 'Enter tags separated by commas...',
+                showCancelButton: true,
+                confirmButtonText: 'Update',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const newTags = result.value.split(',').map(tag => tag.trim()).filter(tag => tag);
+                    fetch(`/api/modify_evidence/${evidenceId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ tags: result.value })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                title: 'Tags Updated!',
+                                text: data.message,
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Update Failed',
+                                text: data.message,
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Failed to update tags. Please try again.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    });
+                }
+            });
+        }
+
+        function modifyMetadataFromAudit(evidenceId) {
+            Swal.fire({
+                title: 'Edit Metadata',
+                html: `
+                    <div class="text-center mb-3">
+                        <i class="fas fa-info-circle fa-2x text-info mb-3"></i>
+                        <p>Metadata editing functionality would be implemented here.</p>
+                        <p class="text-muted">This could include editing file names, categories, or other metadata fields.</p>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'Close',
+                showConfirmButton: false,
+                cancelButtonText: 'Cancel'
+            });
+        }
+
+        function deleteEvidenceFromAudit(evidenceId) {
+            Swal.fire({
+                title: 'Delete Evidence',
+                html: `
+                    <div class="text-center mb-3">
+                        <i class="fas fa-exclamation-triangle fa-2x text-danger mb-3"></i>
+                        <p class="text-danger"><strong>This action cannot be undone!</strong></p>
+                        <p>Are you sure you want to permanently delete evidence <strong>${evidenceId}</strong>?</p>
+                        <p class="text-muted">This will remove the evidence from the blockchain and all associated files.</p>
+                    </div>
+                `,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Delete Evidence',
+                cancelButtonText: 'Cancel',
+                confirmButtonColor: '#dc3545'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/api/delete_evidence/${evidenceId}`, {
+                        method: 'DELETE'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                title: 'Evidence Deleted!',
+                                text: data.message,
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Deletion Failed',
+                                text: data.message,
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Failed to delete evidence. Please try again.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    });
+                }
+            });
+        }
+
+        function downloadEvidenceFromAudit(evidenceId) {
+            Swal.fire({
+                title: 'Download Evidence',
+                text: 'This will download the original evidence file.',
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Download',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Create a temporary link to trigger download
+                    const link = document.createElement('a');
+                    link.href = `/api/download_evidence/${evidenceId}`;
+                    link.download = `${evidenceId}_evidence`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    
+                    Swal.fire({
+                        title: 'Download Started',
+                        text: 'Evidence file download has been initiated.',
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                }
+            });
+        }
+
+        function shareQRFromAudit(evidenceId) {
+            fetch(`/api/share_qr/${evidenceId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            title: 'Share QR Code',
+                            html: `
+                                <p>Share this QR code link:</p>
+                                <input type="text" class="form-control mb-3" value="${data.share_url}" readonly>
+                                <div class="text-center">
+                                    <img src="${data.qr_image_url}" alt="QR Code" style="max-width: 200px;">
+                                </div>
+                            `,
+                            showCancelButton: true,
+                            confirmButtonText: 'Copy Link',
+                            cancelButtonText: 'Close'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                navigator.clipboard.writeText(data.share_url).then(() => {
+                                    Swal.fire({
+                                        title: 'Copied!',
+                                        text: 'Share link copied to clipboard.',
+                                        icon: 'success',
+                                        timer: 1500
+                                    });
+                                });
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: data.message,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                })
+                .catch(error => {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Failed to generate share link. Please try again.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                });
+        }
+    </script>
+</body>
+</html>

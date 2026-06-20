@@ -1,0 +1,35 @@
+install python 3.7.0 and i did all settings inside hello-eth ethereum tool
+
+
+install node-v12.13.1-64.msi software 
+then install below packages
+
+i did all setup just follow screens shots
+
+open command prompt and execute beloww commands to install packages
+and then follow screen shots to run code
+
+pip install web3==4.7.2
+pip install Django==2.1.7
+pip install PyQRCode==1.2.1
+pip install pypng==0.0.21
+pip install opencv-python==4.1.1.26
+pip install opencv-contrib-python==4.3.0.36
+
+
+IPFS (recommended)
+-----------------
+This project can store evidence on IPFS when an IPFS daemon is running.
+
+Quick install (Windows):
+	winget install --id IPFS.IPFS-Desktop -e
+
+Then launch "IPFS Desktop" and ensure the IPFS API is available at:
+	http://127.0.0.1:5001
+
+Notes
+-----
+- The bundled scripts use Truffle Develop (default RPC: http://127.0.0.1:9545)
+- You can force IPFS to be required by setting REQUIRE_IPFS=1 before starting the app.
+
+

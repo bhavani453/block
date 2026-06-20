@@ -1,0 +1,13 @@
+Starting Document Protection Blockchain Application...
+Initializing systems...
+Initializing IPFS connection...
+IPFS connection failed: 'charmap' codec can't encode character '\u2705' in position 0: character maps to <undefined>
+Continuing without IPFS - files will be stored locally
+Initializing blockchain connection...
+Blockchain connection error: 'charmap' codec can't encode character '\u274c' in position 0: character maps to <undefined>
+Note: Make sure Ethereum blockchain is running on http://127.0.0.1:8545
+Note: Make sure IPFS daemon is running on http://127.0.0.1:5001
+Available at: http://127.0.0.1:5000
+Test route: http://127.0.0.1:5000/test
+ * Serving Flask app 'MainEnhanced'
+ * Debug mode: off

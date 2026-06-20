@@ -1,0 +1,853 @@
+{% extends "base.html" %}
+
+{% block title %}Evidence Verification Result{% endblock %}
+
+{% block extra_css %}
+<style>
+    .verification-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem 0;
+    }
+
+    .verification-result {
+        text-align: center;
+        padding: 4rem 2rem;
+        border-radius: 20px;
+        margin-bottom: 3rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .verification-verified {
+        background: linear-gradient(135deg, #d4edda 0%, #a3d977 100%);
+        border: 2px solid #28a745;
+        color: #155724;
+    }
+
+    .verification-failed {
+        background: linear-gradient(135deg, #f8d7da 0%, #f56565 100%);
+        border: 2px solid #dc3545;
+        color: #721c24;
+    }
+
+    .verification-pending {
+        background: linear-gradient(135deg, #fff3cd 0%, #ffc107 100%);
+        border: 2px solid #ffc107;
+        color: #856404;
+    }
+
+    .verification-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        animation: pulse 2s infinite;
+    }
+
+    .verification-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .verification-subtitle {
+        font-size: 1.25rem;
+        opacity: 0.8;
+        margin-bottom: 2rem;
+    }
+
+    .evidence-summary {
+        background: white;
+        border-radius: 20px;
+        padding: 3rem;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border-color);
+        margin-bottom: 2rem;
+        text-align: left;
+    }
+
+    .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+    }
+
+    .summary-item {
+        background: var(--background-light);
+        border-radius: 10px;
+        padding: 1.5rem;
+        border-left: 4px solid var(--primary-blue);
+    }
+
+    .summary-label {
+        font-weight: 600;
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.5rem;
+    }
+
+    .summary-value {
+        font-size: 1.1rem;
+        color: var(--text-primary);
+        word-break: break-all;
+    }
+
+    .verification-details {
+        background: white;
+        border-radius: 20px;
+        padding: 3rem;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border-color);
+        margin-bottom: 2rem;
+    }
+
+    .check-item {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+        background: var(--background-light);
+    }
+
+    .check-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        margin-right: 1rem;
+        flex-shrink: 0;
+        font-size: 1.2rem;
+    }
+
+    .check-passed {
+        background: linear-gradient(135deg, #28a745, #20c997);
+    }
+
+    .check-failed {
+        background: linear-gradient(135deg, #dc3545, #fd7e14);
+    }
+
+    .check-warning {
+        background: linear-gradient(135deg, #ffc107, #fd7e14);
+    }
+
+    .check-content {
+        flex: 1;
+    }
+
+    .check-title {
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.25rem;
+    }
+
+    .check-description {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+    }
+
+    .blockchain-verification {
+        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        color: white;
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .blockchain-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .blockchain-item {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    .blockchain-value {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--accent-orange);
+        margin-bottom: 0.5rem;
+    }
+
+    .blockchain-label {
+        font-size: 0.875rem;
+        opacity: 0.8;
+    }
+
+    .action-buttons {
+        text-align: center;
+        margin-top: 3rem;
+    }
+
+    .security-score {
+        background: white;
+        border-radius: 20px;
+        padding: 3rem;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border-color);
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .score-circle {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        position: relative;
+    }
+
+    .score-high {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+    }
+
+    .score-medium {
+        background: linear-gradient(135deg, #ffc107, #fd7e14);
+        color: white;
+    }
+
+    .score-low {
+        background: linear-gradient(135deg, #dc3545, #fd7e14);
+        color: white;
+    }
+
+    .qr-verification {
+        background: var(--background-light);
+        border-radius: 15px;
+        padding: 2rem;
+        margin-top: 2rem;
+        text-align: center;
+    }
+
+    .timestamp-info {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 10px;
+        padding: 1rem;
+        margin-top: 2rem;
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .verification-container > * {
+        animation: fadeIn 0.6s ease-out;
+    }
+
+    .badge-status {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border-radius: 25px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin: 0.25rem;
+    }
+
+    .badge-verified {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .badge-failed {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+    .badge-warning {
+        background: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeeba;
+    }
+
+    .qr-actions {
+        background: white;
+        border-radius: 20px;
+        padding: 3rem;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border-color);
+        margin-top: 2rem;
+    }
+
+    .btn-action {
+        padding: 1.5rem 1rem;
+        border-radius: 15px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-action:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .btn-action i {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .btn-action small {
+        font-size: 0.75rem;
+        opacity: 0.8;
+        display: block;
+        margin-top: 0.25rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container verification-container">
+    <!-- Main Verification Result -->
+    <div class="verification-result {% if result.overall_status == 'verified' %}verification-verified{% elif result.overall_status == 'failed' %}verification-failed{% else %}verification-pending{% endif %}">
+        <div class="verification-icon">
+            {% if result.overall_status == 'verified' %}
+                <i class="fas fa-check-circle"></i>
+            {% elif result.overall_status == 'failed' %}
+                <i class="fas fa-times-circle"></i>
+            {% else %}
+                <i class="fas fa-clock"></i>
+            {% endif %}
+        </div>
+        
+        <h1 class="verification-title">
+            {% if result.overall_status == 'verified' %}
+                Evidence Verified
+            {% elif result.overall_status == 'failed' %}
+                Verification Failed
+            {% else %}
+                Verification Pending
+            {% endif %}
+        </h1>
+        
+        <p class="verification-subtitle">
+            {% if result.overall_status == 'verified' %}
+                The evidence integrity has been successfully verified using blockchain technology
+            {% elif result.overall_status == 'failed' %}
+                The evidence verification process has detected integrity issues
+            {% else %}
+                The evidence is currently being processed for verification
+            {% endif %}
+        </p>
+
+        <div class="timestamp-info">
+            <i class="fas fa-clock me-2"></i>
+            Verification performed on: {{ result.verification_timestamp }}
+        </div>
+    </div>
+
+    <!-- Security Score -->
+    <div class="security-score">
+        <h3 class="mb-4">
+            <i class="fas fa-shield-alt me-2 text-primary"></i>
+            Security Score
+        </h3>
+        
+        <div class="score-circle {% if result.security_score >= 80 %}score-high{% elif result.security_score >= 60 %}score-medium{% else %}score-low{% endif %}">
+            {{ result.security_score }}/100
+        </div>
+        
+        <p class="mt-3">
+            {% if result.security_score >= 80 %}
+                <span class="badge-verified">Excellent Security</span>
+            {% elif result.security_score >= 60 %}
+                <span class="badge-warning">Good Security</span>
+            {% else %}
+                <span class="badge-failed">Security Concerns</span>
+            {% endif %}
+        </p>
+    </div>
+
+    <!-- Evidence Summary -->
+    <div class="evidence-summary">
+        <h3 class="mb-4">
+            <i class="fas fa-file-alt me-2 text-primary"></i>
+            Evidence Summary
+        </h3>
+        
+        <div class="summary-grid">
+            <div class="summary-item">
+                <div class="summary-label">Evidence ID</div>
+                <div class="summary-value">{{ result.evidence_id }}</div>
+            </div>
+            
+            <div class="summary-item">
+                <div class="summary-label">File Name</div>
+                <div class="summary-value">{{ result.filename }}</div>
+            </div>
+            
+            <div class="summary-item">
+                <div class="summary-label">File Hash</div>
+                <div class="summary-value" style="font-family: monospace; font-size: 0.9rem;">{{ result.file_hash[:32] }}...</div>
+            </div>
+            
+            <div class="summary-item">
+                <div class="summary-label">Upload Date</div>
+                <div class="summary-value">{{ result.upload_timestamp }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blockchain Verification -->
+    <div class="blockchain-verification">
+        <h3><i class="fab fa-ethereum me-2"></i>Blockchain Verification Status</h3>
+        <div class="blockchain-grid">
+            <div class="blockchain-item">
+                <div class="blockchain-value">
+                    {% if result.blockchain_verified %}✓ Verified{% else %}✗ Failed{% endif %}
+                </div>
+                <div class="blockchain-label">Blockchain Status</div>
+            </div>
+            <div class="blockchain-item">
+                <div class="blockchain-value">{{ result.block_number if result.block_number else 'N/A' }}</div>
+                <div class="blockchain-label">Block Number</div>
+            </div>
+            <div class="blockchain-item">
+                <div class="blockchain-value">{{ result.confirmations if result.confirmations else '0' }}</div>
+                <div class="blockchain-label">Confirmations</div>
+            </div>
+            <div class="blockchain-item">
+                <div class="blockchain-value">{{ "%.4f"|format(result.gas_used / 1000000) if result.gas_used else '0' }}M</div>
+                <div class="blockchain-label">Gas Used</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Verification Details -->
+    <div class="verification-details">
+        <h3 class="mb-4">
+            <i class="fas fa-list-check me-2 text-primary"></i>
+            Verification Checks
+        </h3>
+        
+        {% for check in result.verification_checks %}
+        <div class="check-item">
+            <div class="check-icon {% if check.status == 'passed' %}check-passed{% elif check.status == 'failed' %}check-failed{% else %}check-warning{% endif %}">
+                {% if check.status == 'passed' %}
+                    <i class="fas fa-check"></i>
+                {% elif check.status == 'failed' %}
+                    <i class="fas fa-times"></i>
+                {% else %}
+                    <i class="fas fa-exclamation"></i>
+                {% endif %}
+            </div>
+            <div class="check-content">
+                <div class="check-title">{{ check.name }}</div>
+                <div class="check-description">{{ check.description }}</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- QR Code Verification (if accessed via QR) -->
+    {% if result.qr_verified %}
+    <div class="qr-verification">
+        <h4><i class="fas fa-qrcode me-2"></i>QR Code Verification</h4>
+        <p class="mb-0">This verification was initiated by scanning a QR code. The QR code authenticity has been verified.</p>
+    </div>
+    {% endif %}
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg me-3">
+            <i class="fas fa-tachometer-alt me-2"></i>Back to Dashboard
+        </a>
+        
+        {% if result.evidence_id %}
+        <a href="{{ url_for('view_evidence', evidence_id=result.evidence_id) }}" class="btn btn-outline-primary btn-lg me-3">
+            <i class="fas fa-info-circle me-2"></i>View Details
+        </a>
+        {% endif %}
+        
+        <button onclick="window.print()" class="btn btn-outline-secondary btn-lg me-3">
+            <i class="fas fa-print me-2"></i>Print Report
+        </button>
+        
+        <button onclick="shareVerification()" class="btn btn-outline-success btn-lg">
+            <i class="fas fa-share-alt me-2"></i>Share Result
+        </button>
+    </div>
+
+    <!-- QR Code Actions (Available after verification) -->
+    {% if result.evidence_id and result.overall_status == 'verified' %}
+    <div class="qr-actions mt-4">
+        <h3 class="mb-4">
+            <i class="fas fa-qrcode me-2 text-primary"></i>
+            Evidence Management Actions
+        </h3>
+        
+        <div class="row g-3">
+            <div class="col-md-6 col-lg-3">
+                <button class="btn btn-success btn-action w-100" onclick="verifyIntegrity('{{ result.evidence_id }}')">
+                    <i class="fas fa-shield-alt me-2"></i>
+                    <span class="d-block">Verify Integrity</span>
+                    <small class="text-muted">Check file & blockchain</small>
+                </button>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <button class="btn btn-warning btn-action w-100" onclick="modifyEvidence('{{ result.evidence_id }}')">
+                    <i class="fas fa-edit me-2"></i>
+                    <span class="d-block">Modify Evidence</span>
+                    <small class="text-muted">Update metadata</small>
+                </button>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <button class="btn btn-danger btn-action w-100" onclick="deleteEvidence('{{ result.evidence_id }}')">
+                    <i class="fas fa-trash me-2"></i>
+                    <span class="d-block">Delete Evidence</span>
+                    <small class="text-muted">Remove permanently</small>
+                </button>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <button class="btn btn-info btn-action w-100" onclick="downloadEvidence('{{ result.evidence_id }}')">
+                    <i class="fas fa-download me-2"></i>
+                    <span class="d-block">Download</span>
+                    <small class="text-muted">Get original file</small>
+                </button>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <button class="btn btn-secondary btn-action w-100" onclick="shareQRCode('{{ result.evidence_id }}')">
+                    <i class="fas fa-share me-2"></i>
+                    <span class="d-block">Share QR Code</span>
+                    <small class="text-muted">Generate shareable link</small>
+                </button>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add copy functionality for hashes
+    const hashElements = document.querySelectorAll('.summary-value[style*="monospace"]');
+    
+    hashElements.forEach(element => {
+        element.style.cursor = 'pointer';
+        element.title = 'Click to copy full hash';
+        
+        element.addEventListener('click', function() {
+            const fullHash = '{{ result.file_hash }}';
+            navigator.clipboard.writeText(fullHash).then(function() {
+                const originalText = element.textContent;
+                element.textContent = '✓ Copied!';
+                element.style.color = 'var(--success-color)';
+                
+                setTimeout(() => {
+                    element.textContent = originalText;
+                    element.style.color = '';
+                }, 2000);
+            });
+        });
+    });
+
+    // Auto-refresh if verification is pending
+    {% if result.overall_status == 'pending' %}
+    setTimeout(function() {
+        location.reload();
+    }, 30000); // Refresh every 30 seconds
+    {% endif %}
+});
+
+function shareVerification() {
+    const url = window.location.href;
+    const text = 'Evidence Verification Result: {{ result.overall_status.title() }}';
+    
+    if (navigator.share) {
+        navigator.share({
+            title: 'Evidence Verification',
+            text: text,
+            url: url
+        });
+    } else {
+        // Fallback to copying to clipboard
+        navigator.clipboard.writeText(`${text}\n${url}`).then(function() {
+            alert('Verification link copied to clipboard!');
+        });
+    }
+}
+
+// Security score animation
+window.addEventListener('load', function() {
+    const scoreCircle = document.querySelector('.score-circle');
+    if (scoreCircle) {
+        const score = {{ result.security_score }};
+        let currentScore = 0;
+        const increment = score / 50; // Animate over 50 frames
+        
+        const timer = setInterval(() => {
+            currentScore += increment;
+            if (currentScore >= score) {
+                currentScore = score;
+                clearInterval(timer);
+            }
+            scoreCircle.textContent = Math.round(currentScore) + '/100';
+        }, 20);
+    }
+});
+
+// QR Code Action Functions
+function verifyIntegrity(evidenceId) {
+    Swal.fire({
+        title: 'Verify Evidence Integrity',
+        text: 'This will check the file integrity and blockchain status.',
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonText: 'Verify',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`/api/verify_integrity/${evidenceId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            title: 'Integrity Verified!',
+                            text: data.message,
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Verification Failed',
+                            text: data.message,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                })
+                .catch(error => {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Failed to verify integrity. Please try again.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                });
+        }
+    });
+}
+
+function modifyEvidence(evidenceId) {
+    Swal.fire({
+        title: 'Modify Evidence',
+        html: `
+            <form id="modifyForm">
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" rows="3" placeholder="Enter new description"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="tags" class="form-label">Tags (comma-separated)</label>
+                    <input type="text" class="form-control" id="tags" placeholder="tag1, tag2, tag3">
+                </div>
+            </form>
+        `,
+        showCancelButton: true,
+        confirmButtonText: 'Update',
+        cancelButtonText: 'Cancel',
+        preConfirm: () => {
+            const description = document.getElementById('description').value;
+            const tags = document.getElementById('tags').value;
+            return { description, tags };
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`/api/modify_evidence/${evidenceId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(result.value)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Evidence Modified!',
+                        text: data.message,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Modification Failed',
+                        text: data.message,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Failed to modify evidence. Please try again.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            });
+        }
+    });
+}
+
+function deleteEvidence(evidenceId) {
+    Swal.fire({
+        title: 'Delete Evidence',
+        text: 'This action cannot be undone. The evidence will be permanently deleted and recorded on the blockchain.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Delete',
+        cancelButtonText: 'Cancel',
+        confirmButtonColor: '#dc3545'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`/api/delete_evidence/${evidenceId}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Evidence Deleted!',
+                        text: data.message,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        window.location.href = '/dashboard';
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Deletion Failed',
+                        text: data.message,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Failed to delete evidence. Please try again.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            });
+        }
+    });
+}
+
+function downloadEvidence(evidenceId) {
+    Swal.fire({
+        title: 'Download Evidence',
+        text: 'This will download the original evidence file.',
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonText: 'Download',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Create a temporary link to trigger download
+            const link = document.createElement('a');
+            link.href = `/api/download_evidence/${evidenceId}`;
+            link.download = `${evidenceId}_evidence`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            Swal.fire({
+                title: 'Download Started',
+                text: 'Evidence file download has been initiated.',
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false
+            });
+        }
+    });
+}
+
+function shareQRCode(evidenceId) {
+    fetch(`/api/share_qr/${evidenceId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire({
+                    title: 'Share QR Code',
+                    html: `
+                        <p>Share this QR code link:</p>
+                        <input type="text" class="form-control mb-3" value="${data.share_url}" readonly>
+                        <div class="text-center">
+                            <img src="${data.qr_image_url}" alt="QR Code" style="max-width: 200px;">
+                        </div>
+                    `,
+                    showCancelButton: true,
+                    confirmButtonText: 'Copy Link',
+                    cancelButtonText: 'Close'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        navigator.clipboard.writeText(data.share_url).then(() => {
+                            Swal.fire({
+                                title: 'Copied!',
+                                text: 'Share link copied to clipboard.',
+                                icon: 'success',
+                                timer: 1500
+                            });
+                        });
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error',
+                    text: data.message,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        })
+        .catch(error => {
+            Swal.fire({
+                title: 'Error',
+                text: 'Failed to generate share link. Please try again.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,453 @@
+{% extends "Base.html" %}
+
+{% block title %}User Management - Document Protection System{% endblock %}
+
+{% block extra_css %}
+<style>
+    .role-badge {
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.25rem 0.5rem;
+    }
+    .user-address {
+        font-family: 'Courier New', monospace;
+        font-size: 0.85rem;
+        word-break: break-all;
+    }
+    .permissions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+    }
+    .permission-card {
+        border: 1px solid #dee2e6;
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+        background: white;
+    }
+    .permission-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .permission-list li {
+        padding: 0.25rem 0;
+        border-bottom: 1px solid #f8f9fa;
+    }
+    .permission-list li:last-child {
+        border-bottom: none;
+    }
+    .status-active {
+        color: #28a745;
+        font-weight: 600;
+    }
+    .status-revoked {
+        color: #dc3545;
+        font-weight: 600;
+    }
+    .feature-highlight {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    .add-user-form {
+        background: #f8f9fa;
+        border-radius: 0.5rem;
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="feature-highlight text-center">
+                <h2 class="mb-3">
+                    <i class="fas fa-users-cog me-3"></i>
+                    User Management & Access Control
+                </h2>
+                <p class="mb-0 lead">
+                    Manage user roles, permissions, and blockchain-based authentication for the evidence management system
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ZKP Authentication Info -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-primary">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-shield-alt text-primary me-2"></i>
+                        Zero-Knowledge Proof Authentication
+                    </h5>
+                    <p class="card-text">
+                        This system implements ZKP-based authentication to verify user identity without revealing sensitive information. 
+                        User roles control access to evidence and system functions.
+                    </p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="fw-bold text-primary">🛡️ Security Features:</h6>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success me-2"></i>Zero-Knowledge Proof user verification</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Role-based access control (RBAC)</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="fw-bold text-primary">🔗 Blockchain Integration:</h6>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success me-2"></i>Blockchain-recorded access permissions</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Cryptographic user authentication</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add New User Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="add-user-form">
+                <h4 class="mb-3">
+                    <i class="fas fa-user-plus text-primary me-2"></i>
+                    Add New User
+                </h4>
+                <form id="addUserForm">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="userAddress" class="form-label">User Wallet Address</label>
+                            <input type="text" class="form-control" id="userAddress" placeholder="0x..." required>
+                            <div class="form-text">Enter a valid Ethereum wallet address</div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="userRole" class="form-label">Role</label>
+                            <select class="form-select" id="userRole" required>
+                                <option value="">Select Role</option>
+                                <option value="admin">Admin</option>
+                                <option value="investigator">Investigator</option>
+                                <option value="viewer">Viewer</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="userName" class="form-label">Display Name</label>
+                            <input type="text" class="form-control" id="userName" placeholder="John Doe" required>
+                        </div>
+                        <div class="col-md-2 mb-3 d-flex align-items-end">
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="fas fa-plus me-1"></i>Add User
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Current Users Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-users me-2"></i>
+                        Current System Users
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>User Address</th>
+                                    <th>Display Name</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Registration Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <!-- Sample data - in real implementation, this would come from blockchain -->
+                                <tr>
+                                    <td class="user-address">0x742d35Cc6568C0532d6e2a2B3E51C17f</td>
+                                    <td><strong>System Administrator</strong></td>
+                                    <td><span class="badge bg-danger role-badge">ADMIN</span></td>
+                                    <td><span class="status-active"><i class="fas fa-check-circle me-1"></i>Active</span></td>
+                                    <td>2025-01-01</td>
+                                    <td>
+                                        <button class="btn btn-outline-danger btn-sm" onclick="revokeUser(this)">
+                                            <i class="fas fa-ban me-1"></i>Revoke
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="user-address">0x8f4B5C7A9D2E6F3B8A5C1E9D7F2A4B6C</td>
+                                    <td>Lead Investigator</td>
+                                    <td><span class="badge bg-primary role-badge">INVESTIGATOR</span></td>
+                                    <td><span class="status-active"><i class="fas fa-check-circle me-1"></i>Active</span></td>
+                                    <td>2025-01-15</td>
+                                    <td>
+                                        <button class="btn btn-outline-primary btn-sm me-1" onclick="editUser(this)">
+                                            <i class="fas fa-edit me-1"></i>Edit
+                                        </button>
+                                        <button class="btn btn-outline-danger btn-sm" onclick="revokeUser(this)">
+                                            <i class="fas fa-ban me-1"></i>Revoke
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="user-address">0x3A7B9C2D5E8F1A4B7C0E3F6A9B2C5D8E</td>
+                                    <td>Evidence Reviewer</td>
+                                    <td><span class="badge bg-secondary role-badge">VIEWER</span></td>
+                                    <td><span class="status-active"><i class="fas fa-check-circle me-1"></i>Active</span></td>
+                                    <td>2025-02-01</td>
+                                    <td>
+                                        <button class="btn btn-outline-primary btn-sm me-1" onclick="editUser(this)">
+                                            <i class="fas fa-edit me-1"></i>Edit
+                                        </button>
+                                        <button class="btn btn-outline-danger btn-sm" onclick="revokeUser(this)">
+                                            <i class="fas fa-ban me-1"></i>Revoke
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Role Permissions Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h4 class="mb-3">
+                <i class="fas fa-key text-warning me-2"></i>
+                Role Permissions Matrix
+            </h4>
+            <div class="permissions-grid">
+                <div class="permission-card">
+                    <h5 class="text-danger mb-3">
+                        <span class="badge bg-danger role-badge me-2">ADMIN</span>
+                        Administrator
+                    </h5>
+                    <ul class="permission-list">
+                        <li><i class="fas fa-check text-success me-2"></i>Upload evidence</li>
+                        <li><i class="fas fa-check text-success me-2"></i>View all evidence</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Manage users</li>
+                        <li><i class="fas fa-check text-success me-2"></i>View audit trails</li>
+                        <li><i class="fas fa-check text-success me-2"></i>System configuration</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Blockchain operations</li>
+                    </ul>
+                </div>
+                <div class="permission-card">
+                    <h5 class="text-primary mb-3">
+                        <span class="badge bg-primary role-badge me-2">INVESTIGATOR</span>
+                        Investigator
+                    </h5>
+                    <ul class="permission-list">
+                        <li><i class="fas fa-check text-success me-2"></i>Upload evidence</li>
+                        <li><i class="fas fa-check text-success me-2"></i>View assigned evidence</li>
+                        <li><i class="fas fa-times text-danger me-2"></i>Manage users</li>
+                        <li><i class="fas fa-check text-success me-2"></i>View related audit trails</li>
+                        <li><i class="fas fa-times text-danger me-2"></i>System configuration</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Evidence verification</li>
+                    </ul>
+                </div>
+                <div class="permission-card">
+                    <h5 class="text-secondary mb-3">
+                        <span class="badge bg-secondary role-badge me-2">VIEWER</span>
+                        Viewer
+                    </h5>
+                    <ul class="permission-list">
+                        <li><i class="fas fa-times text-danger me-2"></i>Upload evidence</li>
+                        <li><i class="fas fa-check text-success me-2"></i>View authorized evidence</li>
+                        <li><i class="fas fa-times text-danger me-2"></i>Manage users</li>
+                        <li><i class="fas fa-check text-success me-2"></i>View limited audit trails</li>
+                        <li><i class="fas fa-times text-danger me-2"></i>System configuration</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Read-only verification</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="row">
+        <div class="col-12 text-center">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary btn-lg">
+                <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Add user form handler
+    document.getElementById('addUserForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const address = document.getElementById('userAddress').value;
+        const role = document.getElementById('userRole').value;
+        const name = document.getElementById('userName').value;
+        
+        if (!address.startsWith('0x') || address.length !== 42) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Invalid Address',
+                text: 'Please enter a valid Ethereum address (42 characters starting with 0x)'
+            });
+            return;
+        }
+        
+        // In real implementation, this would call blockchain contract
+        addUserToTable(address, name, role);
+        
+        // Clear form
+        this.reset();
+        
+        Swal.fire({
+            icon: 'success',
+            title: 'User Added!',
+            text: 'User has been successfully added to the system',
+            showConfirmButton: false,
+            timer: 2000
+        });
+    });
+
+    function addUserToTable(address, name, role) {
+        const tbody = document.getElementById('usersTableBody');
+        const row = tbody.insertRow();
+        
+        const roleClasses = {
+            'admin': 'bg-danger',
+            'investigator': 'bg-primary',
+            'viewer': 'bg-secondary'
+        };
+        
+        const roleClass = roleClasses[role.toLowerCase()];
+        const currentDate = new Date().toISOString().split('T')[0];
+        
+        row.innerHTML = `
+            <td class="user-address">${address}</td>
+            <td><strong>${name}</strong></td>
+            <td><span class="badge ${roleClass} role-badge">${role.toUpperCase()}</span></td>
+            <td><span class="status-active"><i class="fas fa-check-circle me-1"></i>Active</span></td>
+            <td>${currentDate}</td>
+            <td>
+                <button class="btn btn-outline-primary btn-sm me-1" onclick="editUser(this)">
+                    <i class="fas fa-edit me-1"></i>Edit
+                </button>
+                <button class="btn btn-outline-danger btn-sm" onclick="revokeUser(this)">
+                    <i class="fas fa-ban me-1"></i>Revoke
+                </button>
+            </td>
+        `;
+    }
+
+    function editUser(button) {
+        const row = button.closest('tr');
+        const cells = row.getElementsByTagName('td');
+        
+        const address = cells[0].textContent.trim();
+        const name = cells[1].textContent.trim();
+        
+        Swal.fire({
+            title: 'Edit User',
+            input: 'text',
+            inputValue: name,
+            inputLabel: 'Display Name',
+            showCancelButton: true,
+            confirmButtonText: 'Update',
+            inputValidator: (value) => {
+                if (!value) {
+                    return 'Please enter a display name'
+                }
+            }
+        }).then((result) => {
+            if (result.isConfirmed && result.value !== name) {
+                cells[1].innerHTML = `<strong>${result.value}</strong>`;
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Updated!',
+                    text: 'User information has been updated',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
+        });
+    }
+
+    function revokeUser(button) {
+        const row = button.closest('tr');
+        const name = row.getElementsByTagName('td')[1].textContent.trim();
+        
+        Swal.fire({
+            title: 'Revoke User Access',
+            text: `Are you sure you want to revoke access for ${name}?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, revoke access',
+            confirmButtonColor: '#dc3545'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const statusCell = row.getElementsByTagName('td')[3];
+                statusCell.innerHTML = '<span class="status-revoked"><i class="fas fa-times-circle me-1"></i>Revoked</span>';
+                
+                button.innerHTML = '<i class="fas fa-undo me-1"></i>Restore';
+                button.className = 'btn btn-outline-success btn-sm';
+                button.onclick = () => restoreUser(button);
+                
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Access Revoked',
+                    text: 'User access has been revoked successfully',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            }
+        });
+    }
+
+    function restoreUser(button) {
+        const row = button.closest('tr');
+        const name = row.getElementsByTagName('td')[1].textContent.trim();
+        
+        Swal.fire({
+            title: 'Restore User Access',
+            text: `Restore access for ${name}?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, restore access',
+            confirmButtonColor: '#28a745'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const statusCell = row.getElementsByTagName('td')[3];
+                statusCell.innerHTML = '<span class="status-active"><i class="fas fa-check-circle me-1"></i>Active</span>';
+                
+                button.innerHTML = '<i class="fas fa-ban me-1"></i>Revoke';
+                button.className = 'btn btn-outline-danger btn-sm';
+                button.onclick = () => revokeUser(button);
+                
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Access Restored',
+                    text: 'User access has been restored successfully',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            }
+        });
+    }
+</script>
+{% endblock %}

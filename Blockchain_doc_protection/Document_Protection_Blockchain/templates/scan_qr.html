@@ -1,0 +1,572 @@
+{% extends "base.html" %}
+
+{% block title %}QR Code Scanner - Document Protection using Blockchain Technology{% endblock %}
+
+{% block extra_css %}
+<style>
+    .scan-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2rem 0;
+    }
+
+    .scan-header {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-teal) 100%);
+        color: white;
+        border-radius: 20px;
+        padding: 3rem;
+        margin-bottom: 3rem;
+        text-align: center;
+    }
+
+    .camera-card {
+        background: white;
+        border-radius: 20px;
+        padding: 3rem;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border-color);
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .camera-container {
+        margin: 2rem 0;
+    }
+
+    #video {
+        max-width: 100%;
+        max-height: 400px;
+        border: 3px solid var(--primary-blue);
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 123, 255, 0.2);
+    }
+
+    .scan-controls {
+        margin: 2rem 0;
+    }
+
+    .btn-scan {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-teal) 100%);
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 0.5rem;
+    }
+
+    .btn-scan:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 123, 255, 0.3);
+    }
+
+    .btn-scan:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .btn-stop {
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 0.5rem;
+    }
+
+    .btn-stop:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(220, 53, 69, 0.3);
+    }
+
+    .btn-secondary {
+        background: var(--border-color);
+        color: var(--text-primary);
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        margin: 0.5rem;
+    }
+
+    .btn-secondary:hover {
+        background: var(--text-secondary);
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .result-container {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border-color);
+        margin: 2rem 0;
+        display: none;
+    }
+
+    .result-container.show {
+        display: block;
+        animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .alert {
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        border: none;
+        border-radius: 15px;
+        font-size: 1rem;
+    }
+
+    .alert-info {
+        background: linear-gradient(135deg, rgba(0, 123, 255, 0.1) 0%, rgba(102, 126, 234, 0.1) 100%);
+        color: var(--primary-blue);
+        border-left: 4px solid var(--primary-blue);
+    }
+
+    .alert-success {
+        background: linear-gradient(135deg, rgba(40, 167, 69, 0.1) 0%, rgba(25, 135, 84, 0.1) 100%);
+        color: #155724;
+        border-left: 4px solid #28a745;
+    }
+
+    .alert-danger {
+        background: linear-gradient(135deg, rgba(220, 53, 69, 0.1) 0%, rgba(200, 35, 51, 0.1) 100%);
+        color: #721c24;
+        border-left: 4px solid #dc3545;
+    }
+
+    .alert-warning {
+        background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 171, 0, 0.1) 100%);
+        color: #856404;
+        border-left: 4px solid var(--accent-orange);
+    }
+
+    .instructions-card {
+        background: var(--background-light);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-top: 2rem;
+        border-left: 4px solid var(--primary-blue);
+    }
+
+    .instructions-list {
+        list-style: none;
+        padding: 0;
+        margin: 1rem 0;
+    }
+
+    .instructions-list li {
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+    }
+
+    .instructions-list li:last-child {
+        border-bottom: none;
+    }
+
+    .step-number {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-teal) 100%);
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        margin-right: 1rem;
+    }
+
+    .scan-status {
+        background: var(--background-light);
+        border-radius: 10px;
+        padding: 1rem;
+        margin: 1rem 0;
+        text-align: center;
+        font-weight: 600;
+        color: var(--text-secondary);
+    }
+
+    .qr-result-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-top: 1rem;
+        border: 2px solid #28a745;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container scan-container">
+    <!-- Scanner Header -->
+    <div class="scan-header">
+        <h1 class="display-5 fw-bold mb-3">
+            <i class="fas fa-qrcode me-3"></i>
+            QR Code Scanner
+        </h1>
+        <p class="h5 mb-0">Scan evidence QR codes for instant blockchain verification</p>
+    </div>
+
+    <!-- Info Alert -->
+    <div class="alert alert-info">
+        <i class="fas fa-shield-alt me-2"></i>
+        <strong>Evidence Verification:</strong> Scan QR codes on evidence documents to verify authenticity 
+        and access blockchain-stored metadata. Ensure good lighting and hold the QR code steady.
+    </div>
+
+    <!-- Camera Card -->
+    <div class="camera-card">
+        <div class="camera-container">
+            <video id="video" width="500" height="400" style="display: none;"></video>
+            <canvas id="canvas" style="display: none;"></canvas>
+            
+            <div id="startSection">
+                <div class="mb-4">
+                    <i class="fas fa-camera" style="font-size: 4rem; color: var(--primary-blue); margin-bottom: 1rem;"></i>
+                </div>
+                <p class="h5 mb-3">Click the button below to start your camera and scan QR codes</p>
+                <button id="startBtn" class="btn-scan">
+                    <i class="fas fa-video me-2"></i>Start Camera
+                </button>
+            </div>
+            
+            <div id="scanningSection" style="display: none;">
+                <div class="scan-status">
+                    <i class="fas fa-search me-2"></i>Position the QR code within the camera view
+                </div>
+                <button id="stopBtn" class="btn-stop">
+                    <i class="fas fa-stop me-2"></i>Stop Camera
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Result Container -->
+    <div id="resultContainer" class="result-container">
+        <h3 class="mb-3">
+            <i class="fas fa-clipboard-check me-2 text-primary"></i>
+            Scan Result
+        </h3>
+        <div id="scanResult"></div>
+    </div>
+
+    <!-- Instructions -->
+    <div class="instructions-card">
+        <h4 class="mb-3">
+            <i class="fas fa-info-circle me-2 text-primary"></i>
+            How to Use QR Scanner
+        </h4>
+        <ul class="instructions-list">
+            <li>
+                <div class="step-number">1</div>
+                <span>Click "Start Camera" to activate your webcam</span>
+            </li>
+            <li>
+                <div class="step-number">2</div>
+                <span>Position the QR code within the camera view</span>
+            </li>
+            <li>
+                <div class="step-number">3</div>
+                <span>Wait for automatic detection and scanning</span>
+            </li>
+            <li>
+                <div class="step-number">4</div>
+                <span>View evidence verification results instantly</span>
+            </li>
+            <li>
+                <div class="step-number">5</div>
+                <span>Access complete audit trail and metadata</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Back to Dashboard -->
+    <div class="text-center mt-4">
+        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Include QR code scanning library -->
+<script src="https://unpkg.com/@zxing/library@latest/umd/index.min.js"></script>
+<script>
+// Login status from server
+const isUserLoggedIn = {{ session.get('username') | tojson }};
+
+const video = document.getElementById('video');
+const canvas = document.getElementById('canvas');
+const startBtn = document.getElementById('startBtn');
+const stopBtn = document.getElementById('stopBtn');
+const startSection = document.getElementById('startSection');
+const scanningSection = document.getElementById('scanningSection');
+const resultContainer = document.getElementById('resultContainer');
+const scanResult = document.getElementById('scanResult');
+
+let codeReader = null;
+let stream = null;
+
+// Initialize ZXing QR code reader
+if (typeof ZXing !== 'undefined') {
+    codeReader = new ZXing.BrowserQRCodeReader();
+}
+
+startBtn.addEventListener('click', startScanning);
+stopBtn.addEventListener('click', stopScanning);
+
+async function startScanning() {
+    try {
+        if (!codeReader) {
+            throw new Error('QR code reader not available');
+        }
+
+        // Get user media
+        stream = await navigator.mediaDevices.getUserMedia({ 
+            video: { facingMode: 'environment' } 
+        });
+        
+        video.srcObject = stream;
+        video.style.display = 'block';
+        
+        startSection.style.display = 'none';
+        scanningSection.style.display = 'block';
+
+        // Start scanning
+        codeReader.decodeFromVideoDevice(null, video, (result, err) => {
+            if (result) {
+                handleScanResult(result.text);
+            }
+            if (err && !(err instanceof ZXing.NotFoundException)) {
+                console.error('Scanning error:', err);
+            }
+        });
+
+    } catch (error) {
+        console.error('Camera access error:', error);
+        showResult('❌ Camera access denied or not available. Please check permissions.', 'danger');
+    }
+}
+
+function stopScanning() {
+    if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        stream = null;
+    }
+    
+    if (codeReader) {
+        codeReader.reset();
+    }
+    
+    video.style.display = 'none';
+    startSection.style.display = 'block';
+    scanningSection.style.display = 'none';
+}
+
+function handleScanResult(qrData) {
+    try {
+        // Try to parse as JSON (our QR codes)
+        const data = JSON.parse(qrData);
+        
+        if (data.evidence_id) {
+            // Check if user is logged in for dashboard view
+            const isLoggedIn = isUserLoggedIn;
+            
+            if (isLoggedIn) {
+                // Send to backend for processing and redirect to dashboard view
+                fetch('/qr_scan_result', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        scanned_data: qrData
+                    })
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        showResult(`
+                            <div class="alert alert-success">
+                                <strong>✅ Evidence QR Code Detected!</strong>
+                            </div>
+                            <div class="qr-result-card">
+                                <p><strong><i class="fas fa-id-card me-2"></i>Evidence ID:</strong> ${data.evidence_id}</p>
+                                <p><strong><i class="fas fa-fingerprint me-2"></i>File Hash:</strong> ${data.file_hash || 'N/A'}</p>
+                                <p><strong><i class="fas fa-clock me-2"></i>Timestamp:</strong> ${data.timestamp || 'N/A'}</p>
+                                <div class="text-center mt-3">
+                                    <a href="${result.redirect_url}" class="btn-scan">
+                                        <i class="fas fa-eye me-2"></i>View in Dashboard
+                                    </a>
+                                    <a href="/verify/${data.evidence_id}" class="btn-scan" target="_blank">
+                                        <i class="fas fa-shield-check me-2"></i>Public Verification
+                                    </a>
+                                </div>
+                            </div>
+                        `, 'success');
+                        
+                        // Auto-redirect after 2 seconds
+                        setTimeout(() => {
+                            window.location.href = result.redirect_url;
+                        }, 2000);
+                    } else {
+                        showResult(`
+                            <div class="alert alert-danger">
+                                <strong>❌ Error:</strong> ${result.message}
+                            </div>
+                        `, 'danger');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showResult(`
+                        <div class="alert alert-danger">
+                            <strong>❌ Error processing QR code.</strong>
+                        </div>
+                    `, 'danger');
+                });
+            } else {
+                // Not logged in, show public verification option
+                showResult(`
+                    <div class="alert alert-success">
+                        <strong>✅ Evidence QR Code Detected!</strong>
+                    </div>
+                    <div class="qr-result-card">
+                        <p><strong><i class="fas fa-id-card me-2"></i>Evidence ID:</strong> ${data.evidence_id}</p>
+                        <p><strong><i class="fas fa-fingerprint me-2"></i>File Hash:</strong> ${data.file_hash || 'N/A'}</p>
+                        <p><strong><i class="fas fa-clock me-2"></i>Timestamp:</strong> ${data.timestamp || 'N/A'}</p>
+                        <div class="alert alert-info mt-3">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <a href="/login" class="text-decoration-none">Login</a> to view detailed evidence information in your dashboard.
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="/verify/${data.evidence_id}" class="btn-scan">
+                                <i class="fas fa-shield-check me-2"></i>Public Verification
+                            </a>
+                        </div>
+                    </div>
+                `, 'success');
+            }
+        } else {
+            showResult(`
+                <div class="alert alert-warning">
+                    <strong>⚠️ Valid QR code detected but not an evidence QR code.</strong>
+                </div>
+            `, 'warning');
+        }
+        
+    } catch (e) {
+        // Not JSON, try other formats
+        if (qrData.includes('/verify/')) {
+            // URL format
+            const evidenceId = qrData.split('/verify/').pop();
+            const isLoggedIn = isUserLoggedIn;
+            
+            if (isLoggedIn) {
+                showResult(`
+                    <div class="alert alert-success">
+                        <strong>✅ Evidence Verification URL Detected!</strong>
+                    </div>
+                    <div class="qr-result-card">
+                        <p><strong><i class="fas fa-id-card me-2"></i>Evidence ID:</strong> ${evidenceId}</p>
+                        <div class="text-center mt-3">
+                            <a href="/view_evidence/${evidenceId}" class="btn-scan">
+                                <i class="fas fa-eye me-2"></i>View in Dashboard
+                            </a>
+                            <a href="${qrData}" class="btn-scan" target="_blank">
+                                <i class="fas fa-shield-check me-2"></i>Public Verification
+                            </a>
+                        </div>
+                    </div>
+                `, 'success');
+            } else {
+                showResult(`
+                    <div class="alert alert-success">
+                        <strong>✅ Evidence Verification URL Detected!</strong>
+                    </div>
+                    <div class="qr-result-card">
+                        <p><strong><i class="fas fa-id-card me-2"></i>Evidence ID:</strong> ${evidenceId}</p>
+                        <div class="alert alert-info mt-3">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <a href="/login" class="text-decoration-none">Login</a> to view detailed evidence information.
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="${qrData}" class="btn-scan">
+                                <i class="fas fa-shield-check me-2"></i>Verify Evidence
+                            </a>
+                        </div>
+                    </div>
+                `, 'success');
+            }
+        } else {
+            // Generic QR code
+            showResult(`
+                <div class="alert alert-info">
+                    <strong>📱 QR Code Content:</strong>
+                </div>
+                <div class="qr-result-card">
+                    <p><strong>Content:</strong> ${qrData}</p>
+                    <p class="text-secondary"><em>This appears to be a standard QR code, not an evidence verification code.</em></p>
+                </div>
+            `, 'info');
+        }
+    }
+    
+    // Stop scanning after successful read
+    setTimeout(stopScanning, 5000);
+}
+
+function showResult(content, type) {
+    scanResult.innerHTML = content;
+    resultContainer.classList.add('show');
+    resultContainer.style.display = 'block';
+    resultContainer.scrollIntoView({ behavior: 'smooth' });
+}
+
+// Fallback for browsers without QR scanning support
+if (!codeReader) {
+    startBtn.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>QR Scanning Not Supported';
+    startBtn.disabled = true;
+    showResult(`
+        <div class="alert alert-warning">
+            <strong>⚠️ QR code scanning requires a modern browser with camera support.</strong><br>
+            You can manually enter an Evidence ID to verify evidence.
+        </div>
+        <div class="text-center mt-3">
+            <a href="/verify_evidence" class="btn-scan">
+                <i class="fas fa-keyboard me-2"></i>Manual Verification
+            </a>
+        </div>
+    `, 'warning');
+}
+</script>
+{% endblock %}

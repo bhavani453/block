@@ -1,0 +1,638 @@
+[
+  {
+    "action_id": "4d2df1b363a755fb",
+    "timestamp": "2025-09-12T17:11:36.483412",
+    "user": "admin",
+    "action": "USER_LOGIN",
+    "evidence_id": null,
+    "details": {
+      "login_method": "password"
+    },
+    "blockchain_hash": "0xfcb3073f22750dc326a50af396817819b855e97b63f1c8d113d0beaf1240b418"
+  },
+  {
+    "action_id": "fef5fec533145a05",
+    "timestamp": "2025-09-12T17:13:47.076708",
+    "user": "admin",
+    "action": "USER_LOGOUT",
+    "evidence_id": null,
+    "details": {},
+    "blockchain_hash": "0x1b7dbc43a34b982f8af13f116b2453a669cae0d1a444ac7ca47dada5d5ea1c98"
+  },
+  {
+    "action_id": "444ed0fd02b181db",
+    "timestamp": "2025-09-12T17:25:46.090644",
+    "user": "Anand",
+    "action": "USER_REGISTERED",
+    "evidence_id": null,
+    "details": {
+      "email": "ankillaanand@gmail.com",
+      "full_name": "Anand Ankilla",
+      "role": "investigator",
+      "organization": "Anurag University",
+      "org_type": "private_investigation"
+    },
+    "blockchain_hash": "0xb8f145fd374b353f41b4e95bd10b0920d5334aed29692404ebf8cef62c7b3e95"
+  },
+  {
+    "action_id": "ad7115dfe399470c",
+    "timestamp": "2025-09-12T17:25:55.730673",
+    "user": "Anand",
+    "action": "USER_LOGIN",
+    "evidence_id": null,
+    "details": {
+      "login_method": "password"
+    },
+    "blockchain_hash": "0x43e8466a122f34f2aba0a7b19fc874510ebce6391d07107de0886713c5fbf795"
+  },
+  {
+    "action_id": "a2a385d5e41cf7ea",
+    "timestamp": "2025-09-13T12:58:51.200084",
+    "user": "Anand",
+    "action": "USER_LOGIN",
+    "evidence_id": null,
+    "details": {
+      "login_method": "password"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "5a2d05ffaf550109",
+    "timestamp": "2025-09-13T17:23:29.656260",
+    "user": "Anand",
+    "action": "EVIDENCE_ACCESSED",
+    "evidence_id": "EV_1757764291_f41504d4",
+    "details": {
+      "access_method": "qr_authorized_view",
+      "user_role": "investigator"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "57e93f613c6a6fc0",
+    "timestamp": "2025-09-13T17:24:52.963986",
+    "user": "Anand",
+    "action": "EVIDENCE_VERIFIED",
+    "evidence_id": null,
+    "details": {
+      "evidence_id": "EV_1757764291_f41504d4",
+      "status": "valid",
+      "notes": ""
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "deffdf45ffe402c9",
+    "timestamp": "2025-09-13T17:25:25.136438",
+    "user": "Anand",
+    "action": "EVIDENCE_ACCESSED",
+    "evidence_id": "EV_1757764291_f41504d4",
+    "details": {
+      "access_method": "qr_authorized_view",
+      "user_role": "investigator"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "7746f5c05c7cc1b3",
+    "timestamp": "2025-09-13T17:33:57.786369",
+    "user": "Anand",
+    "action": "EVIDENCE_ACCESSED",
+    "evidence_id": "EV_1757764291_f41504d4",
+    "details": {
+      "access_method": "qr_authorized_view",
+      "user_role": "investigator"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "6f78d7b23a59678a",
+    "timestamp": "2025-09-13T17:35:12.188836",
+    "user": "Anand",
+    "action": "USER_LOGIN",
+    "evidence_id": null,
+    "details": {
+      "login_method": "password"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "f6ccead9fa543e09",
+    "timestamp": "2025-09-13T17:36:19.696582",
+    "user": "Anand",
+    "action": "EVIDENCE_ACCESSED",
+    "evidence_id": "EV_1757764291_f41504d4",
+    "details": {
+      "access_method": "qr_authorized_view",
+      "user_role": "investigator"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "6269a1519a4dfe9f",
+    "timestamp": "2025-09-13T17:50:42.797604",
+    "user": "Anand",
+    "action": "EVIDENCE_ACCESSED",
+    "evidence_id": "EV_1757764291_f41504d4",
+    "details": {
+      "access_method": "qr_authorized_view",
+      "user_role": "investigator"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "e3a4fd0ce1bf018c",
+    "timestamp": "2025-09-15T10:13:21.299222",
+    "user": "Anand",
+    "action": "USER_LOGIN",
+    "evidence_id": null,
+    "details": {
+      "login_method": "password"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "5918b20d9d03f75d",
+    "timestamp": "2025-09-15T10:15:19.817449",
+    "user": "Anand",
+    "action": "USER_LOGOUT",
+    "evidence_id": null,
+    "details": {},
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "9921bc6e586acdaa",
+    "timestamp": "2025-09-15T10:15:35.773483",
+    "user": "admin",
+    "action": "USER_LOGIN",
+    "evidence_id": null,
+    "details": {
+      "login_method": "password"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "a3eb333be351569d",
+    "timestamp": "2025-09-15T10:17:16.702275",
+    "user": "admin",
+    "action": "EVIDENCE_ACCESSED",
+    "evidence_id": "EV_1757764291_f41504d4",
+    "details": {
+      "access_method": "qr_authorized_view",
+      "user_role": "admin"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "365226d0d91413de",
+    "timestamp": "2025-09-15T10:17:33.653508",
+    "user": "admin",
+    "action": "share_qr",
+    "evidence_id": "EV_1757764291_f41504d4",
+    "details": {
+      "share_url": "http://127.0.0.1:5000/verify/EV_1757764291_f41504d4",
+      "shared_with": "public_link"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "a8ddf6546868ef8a",
+    "timestamp": "2025-09-15T10:17:33.855419",
+    "user": "admin",
+    "action": "share_qr",
+    "evidence_id": "EV_1757764291_f41504d4",
+    "details": {
+      "share_url": "http://127.0.0.1:5000/verify/EV_1757764291_f41504d4",
+      "shared_with": "public_link"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "1aeb0eb8996b80b8",
+    "timestamp": "2025-09-15T10:17:34.053435",
+    "user": "admin",
+    "action": "share_qr",
+    "evidence_id": "EV_1757764291_f41504d4",
+    "details": {
+      "share_url": "http://127.0.0.1:5000/verify/EV_1757764291_f41504d4",
+      "shared_with": "public_link"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "8e834a768026ca9a",
+    "timestamp": "2025-09-15T10:17:34.247383",
+    "user": "admin",
+    "action": "share_qr",
+    "evidence_id": "EV_1757764291_f41504d4",
+    "details": {
+      "share_url": "http://127.0.0.1:5000/verify/EV_1757764291_f41504d4",
+      "shared_with": "public_link"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "9e8850b4b51a64bd",
+    "timestamp": "2025-09-15T10:17:34.441550",
+    "user": "admin",
+    "action": "share_qr",
+    "evidence_id": "EV_1757764291_f41504d4",
+    "details": {
+      "share_url": "http://127.0.0.1:5000/verify/EV_1757764291_f41504d4",
+      "shared_with": "public_link"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "1e7188551c093e4f",
+    "timestamp": "2025-09-15T10:17:34.635013",
+    "user": "admin",
+    "action": "share_qr",
+    "evidence_id": "EV_1757764291_f41504d4",
+    "details": {
+      "share_url": "http://127.0.0.1:5000/verify/EV_1757764291_f41504d4",
+      "shared_with": "public_link"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "ef8c14c120f1a2ca",
+    "timestamp": "2025-09-15T10:17:34.823380",
+    "user": "admin",
+    "action": "share_qr",
+    "evidence_id": "EV_1757764291_f41504d4",
+    "details": {
+      "share_url": "http://127.0.0.1:5000/verify/EV_1757764291_f41504d4",
+      "shared_with": "public_link"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "701ebacc56287e5e",
+    "timestamp": "2025-09-15T10:17:35.494404",
+    "user": "admin",
+    "action": "EVIDENCE_ACCESSED",
+    "evidence_id": "EV_1757764291_f41504d4",
+    "details": {
+      "access_method": "qr_authorized_view",
+      "user_role": "admin"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "23ef78991dca7d57",
+    "timestamp": "2025-09-15T10:22:51.253362",
+    "user": "admin",
+    "action": "USER_LOGIN",
+    "evidence_id": null,
+    "details": {
+      "login_method": "password"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "e293b1788528de29",
+    "timestamp": "2025-09-15T10:22:57.341089",
+    "user": "admin",
+    "action": "USER_LOGIN",
+    "evidence_id": null,
+    "details": {
+      "login_method": "password"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "309fa2961d73be56",
+    "timestamp": "2025-09-15T10:51:12.727874",
+    "user": "admin",
+    "action": "EVIDENCE_ACCESSED",
+    "evidence_id": "EV_1757764291_f41504d4",
+    "details": {
+      "access_method": "qr_authorized_view",
+      "user_role": "admin"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "94c645ed8854aab0",
+    "timestamp": "2025-09-15T10:51:20.234480",
+    "user": "admin",
+    "action": "share_qr",
+    "evidence_id": "EV_1757764291_f41504d4",
+    "details": {
+      "share_url": "http://127.0.0.1:5000/verify/EV_1757764291_f41504d4",
+      "shared_with": "public_link"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "06ffcccd436f104c",
+    "timestamp": "2025-09-15T10:51:20.411873",
+    "user": "admin",
+    "action": "share_qr",
+    "evidence_id": "EV_1757764291_f41504d4",
+    "details": {
+      "share_url": "http://127.0.0.1:5000/verify/EV_1757764291_f41504d4",
+      "shared_with": "public_link"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "28fd4cc8c3c3a1e0",
+    "timestamp": "2025-09-15T10:51:37.458501",
+    "user": "admin",
+    "action": "share_qr",
+    "evidence_id": "EV_1757756766_59265921",
+    "details": {
+      "share_url": "http://127.0.0.1:5000/verify/EV_1757756766_59265921",
+      "shared_with": "public_link"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "a89535c030030fc8",
+    "timestamp": "2025-09-15T10:51:37.680466",
+    "user": "admin",
+    "action": "share_qr",
+    "evidence_id": "EV_1757756766_59265921",
+    "details": {
+      "share_url": "http://127.0.0.1:5000/verify/EV_1757756766_59265921",
+      "shared_with": "public_link"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "413008bc1d5013bb",
+    "timestamp": "2025-09-15T10:51:37.871515",
+    "user": "admin",
+    "action": "share_qr",
+    "evidence_id": "EV_1757756766_59265921",
+    "details": {
+      "share_url": "http://127.0.0.1:5000/verify/EV_1757756766_59265921",
+      "shared_with": "public_link"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "747ebd08ff4bb64a",
+    "timestamp": "2025-09-15T10:51:38.070265",
+    "user": "admin",
+    "action": "share_qr",
+    "evidence_id": "EV_1757756766_59265921",
+    "details": {
+      "share_url": "http://127.0.0.1:5000/verify/EV_1757756766_59265921",
+      "shared_with": "public_link"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "1d63fc6f3dc536de",
+    "timestamp": "2025-09-15T10:51:50.694544",
+    "user": "admin",
+    "action": "EVIDENCE_VERIFIED",
+    "evidence_id": null,
+    "details": {
+      "evidence_id": "EV_1757756766_59265921",
+      "status": "fake",
+      "notes": "fake\r\n"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "51539ffe98a5c777",
+    "timestamp": "2025-09-15T10:51:58.551065",
+    "user": "admin",
+    "action": "EVIDENCE_ACCESSED",
+    "evidence_id": "EV_1757756766_59265921",
+    "details": {
+      "access_method": "qr_authorized_view",
+      "user_role": "admin"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "a6cfb5209873ad88",
+    "timestamp": "2025-09-15T10:52:17.231607",
+    "user": "admin",
+    "action": "EVIDENCE_ACCESSED",
+    "evidence_id": "EV_1757680793_636520e6",
+    "details": {
+      "access_method": "qr_authorized_view",
+      "user_role": "admin"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "814ce62ab9ad215d",
+    "timestamp": "2025-09-15T10:55:20.234701",
+    "user": "admin",
+    "action": "USER_LOGIN",
+    "evidence_id": null,
+    "details": {
+      "login_method": "password"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "72acac0376d4d8a9",
+    "timestamp": "2025-09-15T10:56:03.244561",
+    "user": "admin",
+    "action": "USER_LOGIN",
+    "evidence_id": null,
+    "details": {
+      "login_method": "password"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "b71f94cedd75e2c3",
+    "timestamp": "2025-09-15T10:56:03.278426",
+    "user": "admin",
+    "action": "delete_evidence",
+    "evidence_id": "EV_1757748559_fddd3cc5",
+    "details": {
+      "deleted_files": [
+        "rr.pdf",
+        "EV_1757748559_fddd3cc5_qr.png"
+      ],
+      "original_uploader": "Anand",
+      "evidence_description": "evidance_001"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "d22d00de47d3d9c5",
+    "timestamp": "2025-09-15T10:58:17.166599",
+    "user": "admin",
+    "action": "EVIDENCE_ACCESSED",
+    "evidence_id": "EV_1757680793_636520e6",
+    "details": {
+      "access_method": "qr_authorized_view",
+      "user_role": "admin"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "6cd97d85f2fe8489",
+    "timestamp": "2025-09-15T10:58:20.121236",
+    "user": "admin",
+    "action": "share_qr",
+    "evidence_id": "EV_1757680793_636520e6",
+    "details": {
+      "share_url": "http://127.0.0.1:5000/verify/EV_1757680793_636520e6",
+      "shared_with": "public_link"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "de2b0e2476776f20",
+    "timestamp": "2025-09-15T10:58:22.124817",
+    "user": "admin",
+    "action": "share_qr",
+    "evidence_id": "EV_1757680793_636520e6",
+    "details": {
+      "share_url": "http://127.0.0.1:5000/verify/EV_1757680793_636520e6",
+      "shared_with": "public_link"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "6e3fc040edf134da",
+    "timestamp": "2025-09-15T10:58:22.425060",
+    "user": "admin",
+    "action": "share_qr",
+    "evidence_id": "EV_1757680793_636520e6",
+    "details": {
+      "share_url": "http://127.0.0.1:5000/verify/EV_1757680793_636520e6",
+      "shared_with": "public_link"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "3d94be99bfb97316",
+    "timestamp": "2025-09-15T10:58:22.661754",
+    "user": "admin",
+    "action": "share_qr",
+    "evidence_id": "EV_1757680793_636520e6",
+    "details": {
+      "share_url": "http://127.0.0.1:5000/verify/EV_1757680793_636520e6",
+      "shared_with": "public_link"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "e47d34fb83547739",
+    "timestamp": "2025-09-15T10:58:25.338516",
+    "user": "admin",
+    "action": "EVIDENCE_VERIFIED",
+    "evidence_id": null,
+    "details": {
+      "evidence_id": "EV_1757680793_636520e6",
+      "status": "invalid",
+      "notes": ""
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "31ddf3477eafef43",
+    "timestamp": "2025-09-15T11:00:35.724833",
+    "user": "admin",
+    "action": "USER_LOGIN",
+    "evidence_id": null,
+    "details": {
+      "login_method": "password"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "d3176a48d18d9782",
+    "timestamp": "2025-09-15T11:00:35.759026",
+    "user": "admin",
+    "action": "delete_evidence",
+    "evidence_id": "EV_1757748800_e0983ba1",
+    "details": {
+      "deleted_files": [
+        "rr.pdf",
+        "EV_1757748800_e0983ba1_qr.png"
+      ],
+      "original_uploader": "Anand",
+      "evidence_description": "kjh"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "e5e804bf1823e0ab",
+    "timestamp": "2025-09-15T11:02:31.299641",
+    "user": "admin",
+    "action": "USER_LOGOUT",
+    "evidence_id": null,
+    "details": {},
+    "blockchain_hash": "0x06a2be8c23c15191a14e0044d27b1af02a16221b23e11c2eb5939d435ab22444"
+  },
+  {
+    "action_id": "85c9c3091b6eca6a",
+    "timestamp": "2025-09-15T11:02:35.444573",
+    "user": "Anand",
+    "action": "USER_LOGIN",
+    "evidence_id": null,
+    "details": {
+      "login_method": "password"
+    },
+    "blockchain_hash": "0x9554cf478713a3e0699fd82c0f5d142ce8b9672b6601d0959f550c3a3ad5732d"
+  },
+  {
+    "action_id": "494e3180c2b5cfc8",
+    "timestamp": "2025-09-15T11:02:47.563053",
+    "user": "Anand",
+    "action": "EVIDENCE_ACCESSED",
+    "evidence_id": "EV_1757764291_f41504d4",
+    "details": {
+      "access_method": "qr_authorized_view",
+      "user_role": "investigator"
+    },
+    "blockchain_hash": "0x33c23a956629604d69e4a2184831719272640c9ae76f109cdaeae289719c8ebf"
+  },
+  {
+    "action_id": "597bcfb17f54b72d",
+    "timestamp": "2025-09-15T11:03:02.390451",
+    "user": "Anand",
+    "action": "USER_LOGOUT",
+    "evidence_id": null,
+    "details": {},
+    "blockchain_hash": "0xa48bf9261952f1ab23861de74f1a6ddc12c15c92c1af2c73fd0b4f88a9add50f"
+  },
+  {
+    "action_id": "30094539712559ea",
+    "timestamp": "2025-09-15T11:03:12.124697",
+    "user": "admin",
+    "action": "USER_LOGIN",
+    "evidence_id": null,
+    "details": {
+      "login_method": "password"
+    },
+    "blockchain_hash": "0x9806b90d5ed0d6cc62c97c46b817975e60065a46bca9b8a871e19227234b6abc"
+  },
+  {
+    "action_id": "2a5ffb0d1f5f6659",
+    "timestamp": "2025-09-15T18:46:52.772798",
+    "user": "Anand",
+    "action": "USER_LOGIN",
+    "evidence_id": null,
+    "details": {
+      "login_method": "password"
+    },
+    "blockchain_hash": null
+  },
+  {
+    "action_id": "150017fb52c94ab0",
+    "timestamp": "2025-09-15T18:48:43.288148",
+    "user": "Anand",
+    "action": "EVIDENCE_ACCESSED",
+    "evidence_id": "EV_1757764291_f41504d4",
+    "details": {
+      "access_method": "qr_authorized_view",
+      "user_role": "investigator"
+    },
+    "blockchain_hash": null
+  }
+]

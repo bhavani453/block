@@ -1,0 +1,85 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Certificate Verification and Validation using Blockchain</title>
+<meta name="keywords" content="Specific Template, HTML CSS, free website template" />
+<meta name="description" content="Specific Template is a free website template provided by TemplateMo.com" />
+<link rel="stylesheet" href="{{ url_for('static', filename='templatemo_style.css') }}">
+ <script LANGUAGE="Javascript" >
+function validate(){
+	var x=document.forms["f1"]["t1"].value;
+	var y=document.forms["f1"]["t2"].value;
+	if(x == null || x==""){
+		window.alert("Username must be enter");
+		document.f1.t1.focus();
+		return false;
+	}
+	if(y == null || y==""){
+		window.alert("Password must be enter");
+		document.f1.t2.focus();
+		return false;
+	}
+	return true;
+}
+		
+	
+	</script>
+</head>
+<body>
+<div id="templatemo_header_wrapper">
+	<div id="templatemo_header">
+
+    	<div id="title">
+		Certificate Verification and Validation using Blockchain</center>
+            
+        </div>
+        
+
+    </div> <!-- end of header -->
+    
+</div> <!-- end of header wrapper -->
+
+<div id="templatemo_menu_wrapper">
+
+    <div id="templatemo_menu">
+           <ul>
+     <li class="nlink"><a href="index">Home</a></li>
+	  <li class="nlink"><a href="AdminLogin">Educational&nbsp;Authority&nbsp;Login</a></li>
+      <li class="nlink"><a href="Login">&nbsp;&nbsp;&nbsp;&nbsp;Company&nbsp;Login&nbsp;Here</a></li>
+      <li class="nlink"><a href="Signup">&nbsp;&nbsp;New&nbsp;Company&nbsp;Signup&nbsp;Here</a></li>
+      
+   </ul>
+  </div>
+  <div class="entry">
+   <br/><br/><br/>
+<br/>
+			<div class="msg"><font size="3" color="red"><center>{{ msg }}</center></font></div>
+	
+			<br/>
+	 <br>
+	  <center><font size="4" color="black"><h3>Admin Login Screen</font></center>
+<form name ="f1" method="post" action="/AdminLoginAction" onsubmit="return validate(this);">
+	<br><br>
+
+	<TABLE align=center width="30%" class="notepad">
+		<TR><TH align="left"><font size="2" color="black">Username</font>
+		<TD>&nbsp;<Input type=text name="t1" value='' onchange='fnCallChkAvailability(this)'>
+		<div id='nameid'></div>
+		</TD>
+		</TR>
+		
+		<TR><TH align="left"><font size="2" color="black">Password</font>
+		<TD>&nbsp;<Input type='password' name="t2"  value=''>
+		</TR>
+		  <TR>
+				 <TD></TD>
+			<TD>	
+		  <input type="submit" value="Login">
+		 
+		  </TABLE>
+		
+</form>
+</div>
+
+</body>
+</html>

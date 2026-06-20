@@ -1,0 +1,275 @@
+{% extends "base.html" %}
+
+{% block title %}System Statistics - Admin Panel{% endblock %}
+
+{% block extra_css %}
+<style>
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        text-align: center;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border-color);
+        transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.2);
+    }
+
+    .stat-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--primary-blue), var(--secondary-teal));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+        color: var(--text-secondary);
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    .system-health {
+        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        color: white;
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .health-indicator {
+        display: inline-flex;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 0.5rem 1rem;
+        border-radius: 25px;
+        font-size: 0.9rem;
+        margin-top: 1rem;
+    }
+
+    .health-dot {
+        width: 8px;
+        height: 8px;
+        background: var(--success-color);
+        border-radius: 50%;
+        margin-right: 0.5rem;
+        animation: pulse 2s infinite;
+    }
+
+    .admin-nav {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border-color);
+    }
+
+    .nav-tabs .nav-link {
+        border: none;
+        color: var(--text-secondary);
+        font-weight: 500;
+        padding: 0.75rem 1.5rem;
+    }
+
+    .nav-tabs .nav-link.active {
+        background: linear-gradient(135deg, var(--primary-blue), var(--secondary-teal));
+        color: white;
+        border-radius: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Admin Navigation -->
+<div class="admin-nav">
+    <ul class="nav nav-tabs" id="adminTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="stats-tab" data-bs-toggle="tab" data-bs-target="#stats" type="button" role="tab">
+                <i class="fas fa-chart-bar me-2"></i>System Statistics
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button" role="tab">
+                <i class="fas fa-users me-2"></i>User Activity
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="security-tab" data-bs-toggle="tab" data-bs-target="#security" type="button" role="tab">
+                <i class="fas fa-shield-alt me-2"></i>Security
+            </button>
+        </li>
+    </ul>
+</div>
+
+<!-- Tab Content -->
+<div class="tab-content" id="adminTabContent">
+    <!-- Statistics Tab -->
+    <div class="tab-pane fade show active" id="stats" role="tabpanel">
+        <!-- System Health -->
+        <div class="system-health">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h3><i class="fas fa-heartbeat me-2"></i>System Health Overview</h3>
+                    <p class="mb-0">All systems operational with optimal performance metrics</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="health-indicator">
+                        <div class="health-dot"></div>
+                        All Systems Operational
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-users text-primary"></i>
+                </div>
+                <div class="stat-value">{{ stats.total_users }}</div>
+                <div class="stat-label">Total Users</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-folder-open text-success"></i>
+                </div>
+                <div class="stat-value">{{ stats.total_evidence }}</div>
+                <div class="stat-label">Total Evidence Files</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-check-circle text-info"></i>
+                </div>
+                <div class="stat-value">{{ stats.verified_evidence }}</div>
+                <div class="stat-label">Verified Documents</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-link text-warning"></i>
+                </div>
+                <div class="stat-value">{{ stats.blockchain_stored }}</div>
+                <div class="stat-label">Blockchain Stored</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-history text-danger"></i>
+                </div>
+                <div class="stat-value">{{ stats.total_audit_entries }}</div>
+                <div class="stat-label">Audit Entries</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-server text-secondary"></i>
+                </div>
+                <div class="stat-value">{{ stats.system_uptime }}</div>
+                <div class="stat-label">System Uptime</div>
+            </div>
+        </div>
+
+        <!-- Performance Metrics -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-chart-line me-2"></i>Performance Metrics</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Storage Used</label>
+                            <div class="progress">
+                                <div class="progress-bar bg-primary" style="width: 45%">{{ stats.storage_used }}</div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Active Sessions</label>
+                            <div class="progress">
+                                <div class="progress-bar bg-success" style="width: 20%">{{ stats.active_sessions }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-cogs me-2"></i>System Configuration</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <i class="fab fa-ethereum fa-2x text-primary mb-2"></i>
+                                <div>Blockchain</div>
+                                <small class="text-success">Connected</small>
+                            </div>
+                            <div class="col-6">
+                                <i class="fas fa-envelope fa-2x text-info mb-2"></i>
+                                <div>Email</div>
+                                <small class="text-success">Configured</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Users Tab -->
+    <div class="tab-pane fade" id="users" role="tabpanel">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-users me-2"></i>User Activity Overview</h5>
+            </div>
+            <div class="card-body">
+                <a href="{{ url_for('admin_user_activity') }}" class="btn btn-primary">
+                    <i class="fas fa-chart-bar me-2"></i>View Detailed User Activity
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Security Tab -->
+    <div class="tab-pane fade" id="security" role="tabpanel">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-shield-alt me-2"></i>Security Settings</h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Security configuration and monitoring features will be available in future updates.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Auto-refresh stats every 30 seconds
+    setInterval(function() {
+        location.reload();
+    }, 30000);
+</script>
+{% endblock %}

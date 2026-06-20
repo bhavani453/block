@@ -1,0 +1,42 @@
+{
+  "roles": {
+    "admin": {
+      "permissions": [
+        "*"
+      ],
+      "description": "Full system access"
+    },
+    "user": {
+      "permissions": [
+        "upload_evidence",
+        "view_evidence",
+        "verify_evidence",
+        "generate_qr"
+      ],
+      "description": "Standard user with evidence management access"
+    },
+    "investigator": {
+      "permissions": [
+        "upload_evidence",
+        "view_evidence",
+        "verify_evidence",
+        "generate_qr"
+      ],
+      "description": "Evidence investigation access"
+    },
+    "viewer": {
+      "permissions": [
+        "view_evidence",
+        "verify_evidence"
+      ],
+      "description": "Read-only access"
+    }
+  },
+  "user_assignments": {
+    "admin": "admin",
+    "demo": "user",
+    "viewer": "viewer",
+    "Anand": "investigator",
+    "investigator": "investigator"
+  }
+}

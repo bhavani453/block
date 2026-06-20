@@ -1,0 +1,557 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Evidence - Document Protection using Blockchain Technology{% endblock %}
+
+{% block extra_css %}
+<style>
+    .upload-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2rem 0;
+    }
+
+    .upload-header {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-teal) 100%);
+        color: white;
+        border-radius: 20px;
+        padding: 3rem;
+        margin-bottom: 3rem;
+        text-align: center;
+    }
+
+    .upload-card {
+        background: white;
+        border-radius: 20px;
+        padding: 3rem;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border-color);
+        margin-bottom: 2rem;
+    }
+
+    .upload-area {
+        border: 3px dashed var(--primary-blue);
+        border-radius: 15px;
+        padding: 3rem;
+        text-align: center;
+        background: var(--background-light);
+        transition: all 0.3s ease;
+        margin-bottom: 2rem;
+        cursor: pointer;
+    }
+
+    .upload-area:hover {
+        border-color: var(--secondary-teal);
+        background: rgba(102, 126, 234, 0.05);
+        transform: translateY(-2px);
+    }
+
+    .upload-area.dragover {
+        border-color: var(--accent-orange);
+        background: rgba(255, 193, 7, 0.1);
+        transform: scale(1.02);
+    }
+
+    .upload-icon {
+        font-size: 4rem;
+        color: var(--primary-blue);
+        margin-bottom: 1rem;
+    }
+
+    .file-info {
+        background: var(--background-light);
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-top: 1rem;
+    }
+
+    .form-group {
+        margin-bottom: 2rem;
+    }
+
+    .form-label {
+        display: block;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.75rem;
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 1rem;
+        border: 2px solid var(--border-color);
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: white;
+        box-sizing: border-box;
+        font-family: inherit;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary-blue);
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    }
+
+    .form-control.textarea {
+        resize: vertical;
+        min-height: 120px;
+    }
+
+    .btn-upload {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-teal) 100%);
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-right: 1rem;
+    }
+
+    .btn-upload:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 123, 255, 0.3);
+    }
+
+    .btn-upload:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .btn-success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-success:hover {
+        background: linear-gradient(135deg, #218838 0%, #1aa085 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(40, 167, 69, 0.3);
+    }
+
+    .btn-secondary {
+        background: var(--border-color);
+        color: var(--text-primary);
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-secondary:hover {
+        background: var(--text-secondary);
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .supported-formats {
+        background: var(--background-light);
+        border-left: 4px solid var(--primary-blue);
+        padding: 1.5rem;
+        border-radius: 10px;
+        margin-top: 1rem;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+    }
+
+    .alert {
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        border: none;
+        border-radius: 15px;
+        font-size: 1rem;
+    }
+
+    .alert-info {
+        background: linear-gradient(135deg, rgba(0, 123, 255, 0.1) 0%, rgba(102, 126, 234, 0.1) 100%);
+        color: var(--primary-blue);
+        border-left: 4px solid var(--primary-blue);
+    }
+
+    .alert-success {
+        background: linear-gradient(135deg, rgba(40, 167, 69, 0.1) 0%, rgba(25, 135, 84, 0.1) 100%);
+        color: #155724;
+        border-left: 4px solid #28a745;
+    }
+
+    .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: var(--border-color);
+        border-radius: 4px;
+        overflow: hidden;
+        margin-top: 1rem;
+        display: none;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary-blue), var(--secondary-teal));
+        border-radius: 4px;
+        transition: width 0.3s ease;
+        width: 0%;
+    }
+
+    .upload-status {
+        text-align: center;
+        margin-top: 1rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container upload-container">
+    <!-- Upload Header -->
+    <div class="upload-header">
+        <h1 class="display-5 fw-bold mb-3">
+            <i class="fas fa-cloud-upload-alt me-3"></i>
+            Upload Digital Evidence
+        </h1>
+        <p class="h5 mb-0">Secure evidence storage using blockchain technology and IPFS</p>
+    </div>
+
+    <!-- Alert Messages -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle me-2"></i>{{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="alert alert-info">
+        <i class="fas fa-shield-alt me-2"></i>
+        <strong>Secure Evidence Upload:</strong> Files are encrypted and stored on IPFS for distributed storage, 
+        with metadata and hash stored immutably on the blockchain. QR codes are generated for easy verification.
+    </div>
+
+    <!-- Upload Form -->
+    <div class="upload-card">
+        <form method="POST" enctype="multipart/form-data" id="uploadForm" action="/upload">
+            <!-- File Upload Area -->
+            <div class="form-group">
+                <label for="file" class="form-label">
+                    <i class="fas fa-file me-2"></i>Select Evidence File
+                </label>
+                <div class="upload-area" id="fileUpload">
+                    <input type="file" id="file" name="file" style="display: none;" required>
+                    <div id="uploadText">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <p class="h5 mb-2">Click to select file or drag and drop</p>
+                        <p class="text-secondary"><strong>Maximum file size: 50MB</strong></p>
+                    </div>
+                    <div class="file-info" id="fileInfo" style="display: none;"></div>
+                </div>
+                <div class="supported-formats">
+                    <strong><i class="fas fa-info-circle me-2"></i>Supported formats:</strong> 
+                    PDF, DOC, DOCX, TXT, PNG, JPG, JPEG, GIF, ZIP, MP4, MP3, and more
+                </div>
+            </div>
+
+            <!-- Evidence Description -->
+            <div class="form-group">
+                <label for="description" class="form-label">
+                    <i class="fas fa-file-alt me-2"></i>Evidence Description
+                </label>
+                <textarea id="description" 
+                         name="description" 
+                         class="form-control textarea"
+                         placeholder="Describe the evidence, its relevance, context, and any important details that will help in identification and verification..."
+                         required></textarea>
+            </div>
+
+            <!-- Tags -->
+            <div class="form-group">
+                <label for="tags" class="form-label">
+                    <i class="fas fa-tags me-2"></i>Classification Tags
+                </label>
+                <input type="text" 
+                       id="tags" 
+                       name="tags" 
+                       class="form-control"
+                       placeholder="e.g., investigation, crime-scene, document, digital-forensics, evidence-type">
+                <small class="text-secondary mt-2">
+                    Comma-separated tags to help categorize and search evidence
+                </small>
+            </div>
+
+            <!-- Upload Progress -->
+            <div class="progress-bar" id="progressBar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="upload-status" id="uploadStatus"></div>
+
+            <!-- Action Buttons -->
+            <div class="text-center mt-4">
+                <button type="submit" class="btn-upload" id="submitBtn">
+                    <i class="fas fa-shield-alt me-2"></i>Upload to Blockchain & IPFS
+                </button>
+                <a href="{{ url_for('dashboard') }}" class="btn-secondary">
+                    <i class="fas fa-times me-2"></i>Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Back to Dashboard -->
+    <div class="text-center mt-4">
+        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const fileInput = document.getElementById('file');
+const fileUpload = document.getElementById('fileUpload');
+const uploadText = document.getElementById('uploadText');
+const fileInfo = document.getElementById('fileInfo');
+const submitBtn = document.getElementById('submitBtn');
+const form = document.getElementById('uploadForm');
+const progressBar = document.getElementById('progressBar');
+const progressFill = document.getElementById('progressFill');
+const uploadStatus = document.getElementById('uploadStatus');
+
+// Click to select file
+fileUpload.addEventListener('click', () => fileInput.click());
+
+// File selection handler
+fileInput.addEventListener('change', handleFileSelect);
+
+// Drag and drop handlers
+fileUpload.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    fileUpload.classList.add('dragover');
+});
+
+fileUpload.addEventListener('dragleave', () => {
+    fileUpload.classList.remove('dragover');
+});
+
+fileUpload.addEventListener('drop', (e) => {
+    e.preventDefault();
+    fileUpload.classList.remove('dragover');
+    
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+        fileInput.files = files;
+        handleFileSelect();
+    }
+});
+
+function handleFileSelect() {
+    const file = fileInput.files[0];
+    if (file) {
+        uploadText.style.display = 'none';
+        fileInfo.style.display = 'block';
+        fileInfo.innerHTML = `
+            <div class="d-flex align-items-center">
+                <i class="fas fa-file-alt text-primary me-3" style="font-size: 2rem;"></i>
+                <div>
+                    <p class="mb-1"><strong>Selected file:</strong> ${file.name}</p>
+                    <p class="mb-1"><strong>Size:</strong> ${formatFileSize(file.size)}</p>
+                    <p class="mb-0"><strong>Type:</strong> ${file.type || 'Unknown'}</p>
+                </div>
+            </div>
+        `;
+    }
+}
+
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+// Form submission with AJAX and progress tracking
+form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(form);
+    
+    // Update UI for upload state
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Uploading to IPFS & Blockchain...';
+    submitBtn.disabled = true;
+    progressBar.style.display = 'block';
+    uploadStatus.textContent = 'Preparing upload...';
+    
+    // Clear any previous status messages
+    uploadStatus.innerHTML = '';
+    
+    // Simulate progress (in real implementation, this would track actual upload progress)
+    let progress = 0;
+    const progressInterval = setInterval(() => {
+        progress += Math.random() * 15;
+        if (progress > 90) progress = 90;
+        progressFill.style.width = progress + '%';
+        
+        if (progress < 30) {
+            uploadStatus.textContent = 'Encrypting file...';
+        } else if (progress < 60) {
+            uploadStatus.textContent = 'Uploading to IPFS...';
+        } else {
+            uploadStatus.textContent = 'Storing metadata on blockchain...';
+        }
+    }, 200);
+    
+    fetch('/upload', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        console.log('Response status:', response.status);
+        console.log('Response ok:', response.ok);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Response data:', data);
+        clearInterval(progressInterval);
+        progressFill.style.width = '100%';
+        
+        if (data.success) {
+            uploadStatus.innerHTML = `
+                <div class="alert alert-success border-0 shadow-sm">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-check-circle text-success me-2 fs-4"></i>
+                        <h6 class="mb-0">Evidence Upload Successful!</h6>
+                    </div>
+                    
+                    <div class="evidence-details">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="mb-2"><strong>📋 Evidence ID:</strong></p>
+                                <div class="evidence-id-box p-2 bg-light rounded border">
+                                    <code class="text-primary fs-5">${data.evidence_id}</code>
+                                    <button class="btn btn-sm btn-outline-primary ms-2" onclick="copyToClipboard('${data.evidence_id}')">
+                                        <i class="fas fa-copy"></i> Copy
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="mb-2"><strong>📧 Email Notification:</strong></p>
+                                <p class="text-success mb-2">
+                                    <i class="fas fa-paper-plane me-1"></i>
+                                    Evidence details and QR code sent to your email!
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons mt-3">
+                            <a href="/verify/${data.evidence_id}" class="btn btn-primary me-2" target="_blank">
+                                <i class="fas fa-search me-1"></i>Verify Evidence
+                            </a>
+                            <a href="/scan_qr" class="btn btn-info me-2">
+                                <i class="fas fa-qrcode me-1"></i>QR Scanner
+                            </a>
+                            <a href="/dashboard" class="btn btn-success">
+                                <i class="fas fa-tachometer-alt me-1"></i>Go to Dashboard
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Reset form for another upload
+            form.reset();
+            fileInfo.style.display = 'none';
+            uploadText.style.display = 'block';
+            progressBar.style.display = 'none';
+            progressFill.style.width = '0%';
+            
+            // Change button to "Upload Another Evidence"
+            submitBtn.innerHTML = '<i class="fas fa-plus me-2"></i>Upload Another Evidence';
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('btn-upload');
+            submitBtn.classList.add('btn-success');
+            
+        } else {
+            uploadStatus.innerHTML = `
+                <div class="alert alert-danger border-0 shadow-sm">
+                    <i class="fas fa-exclamation-triangle text-danger me-2"></i>
+                    <strong>Upload failed:</strong> ${data.message}
+                </div>
+            `;
+            submitBtn.innerHTML = '<i class="fas fa-shield-alt me-2"></i>Upload to Blockchain & IPFS';
+            submitBtn.disabled = false;
+        }
+    })
+    .catch(error => {
+        clearInterval(progressInterval);
+        console.error('Upload error:', error);
+        uploadStatus.innerHTML = `
+            <div class="alert alert-danger border-0 shadow-sm">
+                <i class="fas fa-times-circle text-danger me-2"></i>
+                <strong>Upload error:</strong> ${error.message}
+            </div>
+        `;
+        submitBtn.innerHTML = '<i class="fas fa-shield-alt me-2"></i>Upload to Blockchain & IPFS';
+        submitBtn.disabled = false;
+        progressBar.style.display = 'none';
+        progressFill.style.width = '0%';
+    });
+});
+
+// Function to reset form for another upload
+function resetFormForNewUpload() {
+    // Reset form
+    form.reset();
+    
+    // Reset file display
+    fileInfo.style.display = 'none';
+    uploadText.style.display = 'block';
+    
+    // Reset progress bar
+    progressBar.style.display = 'none';
+    progressFill.style.width = '0%';
+    
+    // Clear status messages
+    uploadStatus.innerHTML = '';
+    
+    // Reset button to original state
+    submitBtn.innerHTML = '<i class="fas fa-shield-alt me-2"></i>Upload to Blockchain & IPFS';
+    submitBtn.disabled = false;
+    submitBtn.classList.remove('btn-success');
+    submitBtn.classList.add('btn-upload');
+}
+
+// Add click handler for the upload another evidence button
+submitBtn.addEventListener('click', function() {
+    // If button shows "Upload Another Evidence", reset the form
+    if (submitBtn.innerHTML.includes('Upload Another Evidence')) {
+        resetFormForNewUpload();
+    }
+});
+</script>
+{% endblock %}

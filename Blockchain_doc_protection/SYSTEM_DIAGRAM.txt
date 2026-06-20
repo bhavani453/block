@@ -1,0 +1,268 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                           ║
+║         BLOCKCHAIN DOCUMENT PROTECTION - STARTUP FLOW DIAGRAM             ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│  STEP 1: RUN start_everything.bat                                       │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│  ✓ CHECK PREREQUISITES                                                  │
+│    • Python 3.8+                                                        │
+│    • Node.js 18+                                                        │
+│    • Truffle                                                            │
+│    • IPFS Desktop (optional)                                            │
+│    • Python dependencies                                                │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│  ✓ STOP EXISTING PROCESSES                                              │
+│    • Kill old Python processes                                          │
+│    • Free up ports 5000, 5001, 9545                                     │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│  🟢 START IPFS (Port 5001)                                              │
+│     ┌────────────────────────────────────────────┐                     │
+│     │  Launch IPFS Desktop                       │                     │
+│     │  Wait for API to be ready (max 30s)       │                     │
+│     │  Verify: http://127.0.0.1:5001            │                     │
+│     └────────────────────────────────────────────┘                     │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│  🟢 START BLOCKCHAIN (Port 9545)                                        │
+│     ┌────────────────────────────────────────────┐                     │
+│     │  Run: truffle develop                     │                     │
+│     │  Wait for RPC ready (max 20s)             │                     │
+│     │  Verify: http://127.0.0.1:9545            │                     │
+│     │  Load contract: 0x1DD4fb...472EE6         │                     │
+│     └────────────────────────────────────────────┘                     │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│  🟢 START FLASK APP (Port 5000)                                         │
+│     ┌────────────────────────────────────────────┐                     │
+│     │  Run: python MainEnhanced.py               │                     │
+│     │  Connect to IPFS ✓                         │                     │
+│     │  Connect to Blockchain ✓                   │                     │
+│     │  Wait for HTTP ready (max 20s)             │                     │
+│     │  Verify: http://127.0.0.1:5000/test       │                     │
+│     └────────────────────────────────────────────┘                     │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│  ✓ VERIFY ALL SERVICES                                                  │
+│    • IPFS listening on 5001        ✅                                   │
+│    • Blockchain listening on 9545  ✅                                   │
+│    • Flask listening on 5000       ✅                                   │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│  🎉 SUCCESS!                                                            │
+│                                                                          │
+│  Browser opens to: http://127.0.0.1:5000                               │
+│                                                                          │
+│  Login with: admin / admin123                                           │
+└─────────────────────────────────────────────────────────────────────────┘
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                         SERVICE ARCHITECTURE                              ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+
+    ┌─────────────────────────────────────────────────────────────┐
+    │                     USER BROWSER                            │
+    │            http://127.0.0.1:5000                            │
+    └──────────────────────────┬──────────────────────────────────┘
+                               │
+                               │ HTTP Requests
+                               ▼
+    ┌─────────────────────────────────────────────────────────────┐
+    │              FLASK WEB APPLICATION                          │
+    │              (Python - Port 5000)                           │
+    │                                                             │
+    │  • User Authentication                                      │
+    │  • Evidence Upload/Download                                 │
+    │  • QR Code Generation                                       │
+    │  • Blockchain Integration                                   │
+    │  • IPFS Storage                                             │
+    └─────┬──────────────────────────┬────────────────────────────┘
+          │                          │
+          │ Web3.py                  │ ipfshttpclient
+          │                          │
+          ▼                          ▼
+    ┌──────────────┐          ┌──────────────┐
+    │  BLOCKCHAIN  │          │     IPFS     │
+    │   RPC API    │          │   DAEMON     │
+    │  Port 9545   │          │  Port 5001   │
+    │              │          │              │
+    │ • Truffle    │          │ • IPFS       │
+    │   Develop    │          │   Desktop    │
+    │ • Ganache    │          │ • Kubo       │
+    │ • 10 Accounts│          │ • Content    │
+    │ • Smart      │          │   Storage    │
+    │   Contracts  │          │              │
+    └──────────────┘          └──────────────┘
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                           DATA FLOW                                       ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+
+ USER UPLOADS EVIDENCE FILE
+         │
+         ▼
+ ┌───────────────────┐
+ │ Flask receives    │
+ │ and validates     │
+ └───────┬───────────┘
+         │
+         ├─────────────────┐
+         │                 │
+         ▼                 ▼
+ ┌──────────────┐   ┌──────────────┐
+ │ Save to IPFS │   │ Calculate    │
+ │              │   │ SHA256 Hash  │
+ │ Returns:     │   └──────┬───────┘
+ │ QmHash...    │          │
+ └──────┬───────┘          │
+        │                  │
+        └──────┬───────────┘
+               │
+               ▼
+        ┌────────────────┐
+        │ Store metadata │
+        │ on Blockchain  │
+        │ (Smart Contract)│
+        └────────┬───────┘
+                 │
+                 ▼
+          ┌─────────────┐
+          │ Generate QR │
+          │ Code with   │
+          │ Evidence ID │
+          └─────────────┘
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                      MANAGEMENT SCRIPTS                                   ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│  start_everything.bat                                                   │
+│  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │
+│  Complete startup with checks                                           │
+│  • Verifies prerequisites                                               │
+│  • Installs missing dependencies                                        │
+│  • Starts all services in order                                         │
+│  • Validates everything works                                           │
+│  • Opens browser                                                        │
+│                                                                          │
+│  ⭐ USE THIS FOR FIRST TIME AND DAILY USE                              │
+└─────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│  check_status.bat                                                       │
+│  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │
+│  Service status checker                                                 │
+│  • Shows if services are running                                        │
+│  • Displays ports and PIDs                                              │
+│  • Shows versions when available                                        │
+│  • Provides diagnostic info                                             │
+│                                                                          │
+│  🔍 USE THIS TO DIAGNOSE ISSUES                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│  stop_everything.bat                                                    │
+│  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │
+│  Clean shutdown                                                          │
+│  • Stops Flask (Python)                                                 │
+│  • Stops Blockchain (Node/Truffle)                                      │
+│  • Optionally stops IPFS                                                │
+│  • Verifies all stopped                                                 │
+│                                                                          │
+│  🛑 USE THIS BEFORE SHUTTING DOWN PC                                    │
+└─────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│  quick_start.bat                                                        │
+│  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │
+│  Fast startup (legacy)                                                  │
+│  • Minimal checks                                                       │
+│  • Opens services in separate windows                                   │
+│  • Faster but less robust                                               │
+│                                                                          │
+│  ⚡ USE THIS WHEN YOU'RE IN A HURRY                                     │
+└─────────────────────────────────────────────────────────────────────────┘
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                    TROUBLESHOOTING DECISION TREE                          ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+
+                    Something not working?
+                             │
+                             ▼
+                    Run check_status.bat
+                             │
+              ┌──────────────┴──────────────┐
+              │                             │
+         All services                  Some services
+         running OK?                   not running?
+              │                             │
+              ▼                             ▼
+      Check application          Run stop_everything.bat
+      for specific errors               │
+                                        ▼
+                               Wait 5 seconds
+                                        │
+                                        ▼
+                            Run start_everything.bat
+                                        │
+                              ┌─────────┴─────────┐
+                              │                   │
+                         Still fails?        Works now?
+                              │                   │
+                              ▼                   ▼
+                    Check prerequisites     ✅ Fixed!
+                    • Python installed?
+                    • Node.js installed?
+                    • Truffle installed?
+                    • IPFS installed?
+                              │
+                              ▼
+                    Install missing items
+                              │
+                              ▼
+                    Run start_everything.bat
+
+
+═══════════════════════════════════════════════════════════════════════════
+
+                    🎯 QUICK COMMAND REFERENCE
+
+    First Time Setup:       start_everything.bat
+    Daily Use:              start_everything.bat  OR  quick_start.bat
+    Check if Running:       check_status.bat
+    Stop All:               stop_everything.bat
+    
+    App URL:                http://127.0.0.1:5000
+    Admin Login:            admin / admin123
+
+═══════════════════════════════════════════════════════════════════════════

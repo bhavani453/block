@@ -1,0 +1,37 @@
+{
+  "admin": {
+    "password": "admin123",
+    "email": "admin@evidence.system",
+    "role": "admin",
+    "created_at": "2025-09-12T16:33:50.108026"
+  },
+  "demo": {
+    "password": "demo123",
+    "email": "demo@evidence.system",
+    "role": "user",
+    "created_at": "2025-09-12T16:33:50.108026"
+  },
+  "viewer": {
+    "password": "viewer123",
+    "email": "viewer@evidence.system",
+    "role": "viewer",
+    "created_at": "2025-09-12T16:33:50.108026"
+  },
+  "Anand": {
+    "password": "Anand@2025",
+    "email": "ankillaanand@gmail.com",
+    "full_name": "Anand Ankilla",
+    "organization_type": "private_investigation",
+    "organization_name": "Anurag University",
+    "access_justification": "I'm Anand Ankilla i want to upload some documents to verify it's correct or not",
+    "created_at": "2025-09-12T17:25:46.085888",
+    "zkp_enabled": false,
+    "status": "active"
+  },
+  "investigator": {
+    "password": "investigator123",
+    "email": "ankillaanand@gmail.com",
+    "role": "investigator",
+    "created_at": "2025-09-12T18:09:12.616805"
+  }
+}

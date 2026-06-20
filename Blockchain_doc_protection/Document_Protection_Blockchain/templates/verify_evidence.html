@@ -1,0 +1,246 @@
+{% extends "base.html" %}
+
+{% block title %}Verify Evidence - Document Protection using Blockchain Technology{% endblock %}
+
+{% block extra_css %}
+<style>
+    .verify-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem 0;
+    }
+
+    .verify-header {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-teal) 100%);
+        color: white;
+        border-radius: 20px;
+        padding: 3rem;
+        margin-bottom: 3rem;
+        text-align: center;
+    }
+
+    .verify-form-card {
+        background: white;
+        border-radius: 20px;
+        padding: 3rem;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--border-color);
+    }
+
+    .form-group {
+        margin-bottom: 2rem;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 1rem;
+        border: 2px solid var(--border-color);
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary-blue);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .btn-verify {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-teal) 100%);
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+        margin-top: 1rem;
+    }
+
+    .btn-verify:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+    }
+
+    .btn-verify:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .info-section {
+        background: var(--background-light);
+        border-radius: 15px;
+        padding: 2rem;
+        margin-top: 2rem;
+    }
+
+    .info-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+    }
+
+    .info-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .info-list li {
+        padding: 0.5rem 0;
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+    }
+
+    .info-list li:before {
+        content: "✓";
+        color: var(--success-green);
+        font-weight: bold;
+        margin-right: 0.5rem;
+    }
+
+    .example-section {
+        background: white;
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-top: 1rem;
+    }
+
+    .example-title {
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+    }
+
+    .example-code {
+        background: var(--gray-100);
+        padding: 0.5rem;
+        border-radius: 5px;
+        font-family: 'Courier New', monospace;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="verify-container">
+    <!-- Header Section -->
+    <div class="verify-header">
+        <h1 class="display-4 fw-bold mb-3">
+            <i class="fas fa-search me-3"></i>
+            Verify Evidence
+        </h1>
+        <p class="lead mb-0">
+            Verify the authenticity and integrity of evidence files using cryptographic hashes and blockchain records.
+        </p>
+    </div>
+
+    <!-- Verification Form -->
+    <div class="verify-form-card">
+        <form id="verifyForm" action="{{ url_for('verify_evidence_route', evidence_id='PLACEHOLDER') }}" method="GET" onsubmit="handleVerification(event)">
+            <div class="form-group">
+                <label for="evidenceId" class="form-label">
+                    <i class="fas fa-id-card me-2"></i>
+                    Evidence ID
+                </label>
+                <input type="text"
+                       class="form-control"
+                       id="evidenceId"
+                       name="evidence_id"
+                       placeholder="Enter Evidence ID (e.g., EV-2025-001)"
+                       required
+                       pattern="^[A-Za-z0-9\-_]+$"
+                       title="Evidence ID should contain only letters, numbers, hyphens, and underscores">
+                <small class="text-muted mt-1 d-block">
+                    Enter the Evidence ID from your QR code or evidence documentation
+                </small>
+            </div>
+
+            <button type="submit" class="btn-verify" id="verifyBtn">
+                <i class="fas fa-search me-2"></i>
+                Verify Evidence
+            </button>
+        </form>
+
+        <!-- Information Section -->
+        <div class="info-section">
+            <h3 class="info-title">
+                <i class="fas fa-info-circle me-2"></i>
+                What happens during verification?
+            </h3>
+            <ul class="info-list">
+                <li>File integrity is verified using cryptographic hashing</li>
+                <li>Blockchain records are checked for evidence authenticity</li>
+                <li>Upload timestamp and metadata are validated</li>
+                <li>Security score is calculated based on verification results</li>
+            </ul>
+        </div>
+
+        <!-- Example Section -->
+        <div class="example-section">
+            <div class="example-title">Example Evidence IDs:</div>
+            <div class="example-code">EV-2025-001, DOC-2024-045, CERT-2023-012</div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('verifyForm');
+    const evidenceIdInput = document.getElementById('evidenceId');
+    const verifyBtn = document.getElementById('verifyBtn');
+
+    // Handle form submission
+    function handleVerification(event) {
+        event.preventDefault();
+
+        const evidenceId = evidenceIdInput.value.trim();
+
+        if (!evidenceId) {
+            alert('Please enter an Evidence ID');
+            return;
+        }
+
+        // Show loading state
+        verifyBtn.disabled = true;
+        verifyBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Verifying...';
+
+        // Redirect to verification route
+        const verificationUrl = `/verify/${encodeURIComponent(evidenceId)}`;
+        window.location.href = verificationUrl;
+    }
+
+    // Auto-focus on input field
+    evidenceIdInput.focus();
+
+    // Add input validation feedback
+    evidenceIdInput.addEventListener('input', function() {
+        const isValid = this.checkValidity();
+        this.style.borderColor = isValid ? 'var(--success-green)' : 'var(--error-red)';
+    });
+
+    // Handle Enter key
+    evidenceIdInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            handleVerification(e);
+        }
+    });
+});
+</script>
+{% endblock %}

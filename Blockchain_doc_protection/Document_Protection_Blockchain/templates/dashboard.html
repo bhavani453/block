@@ -1,0 +1,828 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Document Protection using Blockchain Technology{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-teal) 100%);
+        color: white;
+        padding: 4rem 0;
+        margin-bottom: 3rem;
+    }
+
+    .system-status {
+        display: inline-flex;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 0.5rem 1rem;
+        border-radius: 25px;
+        font-size: 0.9rem;
+        margin-top: 1rem;
+    }
+
+    .status-indicator {
+        width: 8px;
+        height: 8px;
+        background: var(--success-color);
+        border-radius: 50%;
+        margin-right: 0.5rem;
+        animation: pulse 2s infinite;
+    }
+
+    .dashboard-stats {
+        margin-bottom: 3rem;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        text-align: center;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border-color);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary-blue), var(--secondary-teal));
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.2);
+    }
+
+    .stat-number {
+        font-size: 3rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--primary-blue), var(--secondary-teal));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+        font-weight: 500;
+    }
+
+    .stat-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        opacity: 0.7;
+    }
+
+    .action-grid {
+        margin-bottom: 3rem;
+    }
+
+    .action-card {
+        background: white;
+        border-radius: 20px;
+        padding: 2.5rem;
+        text-align: center;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border-color);
+        transition: all 0.3s ease;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .action-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, var(--primary-blue), var(--secondary-teal));
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 1;
+    }
+
+    .action-card:hover::before {
+        opacity: 0.05;
+    }
+
+    .action-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+    }
+
+    .action-card > * {
+        position: relative;
+        z-index: 2;
+    }
+
+    .action-icon {
+        font-size: 4rem;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(135deg, var(--primary-blue), var(--secondary-teal));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .action-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+    }
+
+    .action-description {
+        color: var(--text-secondary);
+        margin-bottom: 2rem;
+        line-height: 1.6;
+    }
+
+    .recent-activity {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border-color);
+    }
+
+    .activity-item {
+        display: flex;
+        align-items: center;
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .activity-item:last-child {
+        border-bottom: none;
+    }
+
+    /* Evidence Status Styles */
+    .evidence-status-section {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border-color);
+    }
+
+    .status-card {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+    }
+
+    .status-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .status-valid { border-color: #28a745; }
+    .status-valid .status-icon { color: #28a745; }
+
+    .status-invalid { border-color: #dc3545; }
+    .status-invalid .status-icon { color: #dc3545; }
+
+    .status-fake { border-color: #ffc107; }
+    .status-fake .status-icon { color: #ffc107; }
+
+    .status-pending { border-color: #6c757d; }
+    .status-pending .status-icon { color: #6c757d; }
+
+    .status-icon {
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+
+    .status-number {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .status-label {
+        color: #6c757d;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    /* Recent Evidence Activity Styles */
+    .recent-evidence-section {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border-color);
+    }
+
+    .evidence-activity-list {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .evidence-activity-item {
+        display: flex;
+        align-items: flex-start;
+        padding: 15px;
+        border-bottom: 1px solid #e9ecef;
+        transition: background-color 0.2s ease;
+    }
+
+    .evidence-activity-item:hover {
+        background-color: #f8f9fa;
+    }
+
+    .evidence-activity-item:last-child {
+        border-bottom: none;
+    }
+
+    .evidence-activity-item .activity-icon {
+        margin-right: 15px;
+        margin-top: 5px;
+    }
+
+    .evidence-activity-item .activity-content {
+        flex: 1;
+    }
+
+    .evidence-activity-item .activity-title {
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    .evidence-activity-item .activity-details {
+        margin-bottom: 5px;
+    }
+
+    .evidence-activity-item .verification-notes {
+        background: #fff3cd;
+        padding: 8px 12px;
+        border-radius: 6px;
+        border-left: 3px solid #ffc107;
+    }
+
+    .activity-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary-blue), var(--secondary-teal));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        margin-right: 1rem;
+        flex-shrink: 0;
+    }
+
+    .activity-content {
+        flex: 1;
+    }
+
+    .activity-title {
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.25rem;
+    }
+
+    .activity-time {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+    }
+
+    .blockchain-status {
+        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        color: white;
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 3rem;
+    }
+
+    .blockchain-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+    }
+
+    .blockchain-metric {
+        text-align: center;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+    }
+
+    .blockchain-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--accent-orange);
+    }
+
+    .admin-feature {
+        padding: 2rem;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 15px;
+        border: 1px solid var(--border-color);
+        transition: all 0.3s ease;
+    }
+
+    .admin-feature:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(220, 53, 69, 0.2);
+    }
+
+    .admin-feature i {
+        background: linear-gradient(135deg, var(--primary-red), var(--secondary-pink));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">
+                    <i class="fas fa-tachometer-alt me-3"></i>
+                    Welcome to Your Dashboard
+                </h1>
+                <p class="lead mb-3">
+                    Manage your blockchain-secured evidence and documents with advanced 
+                    cryptographic protection and immutable verification.
+                </p>
+                <p class="h5 mb-0">
+                    Welcome back, <strong class="text-warning">{{ username }}</strong>!
+                    {% if user_role == 'admin' %}
+                        <span class="badge bg-danger ms-2">Administrator</span>
+                    {% elif user_role == 'investigator' %}
+                        <span class="badge bg-primary ms-2">Investigator</span>
+                    {% elif user_role == 'user' %}
+                        <span class="badge bg-success ms-2">User</span>
+                    {% else %}
+                        <span class="badge bg-secondary ms-2">Viewer</span>
+                    {% endif %}
+                </p>
+                <div class="system-status">
+                    <div class="status-indicator"></div>
+                    System Operational • Blockchain Connected
+                </div>
+            </div>
+            <div class="col-lg-4 text-center d-none d-lg-block">
+                <i class="fas fa-shield-alt" style="font-size: 8rem; opacity: 0.3;"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Blockchain Status -->
+<div class="container">
+    <div class="blockchain-status">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h3><i class="fab fa-ethereum me-2"></i>Blockchain Network Status</h3>
+                <p class="mb-0">Real-time blockchain metrics and system performance</p>
+            </div>
+            <div class="col-md-6">
+                <div class="blockchain-grid">
+                    <div class="blockchain-metric">
+                        <div class="blockchain-value">{{ blockchain_txns }}</div>
+                        <div class="blockchain-label">Total Transactions</div>
+                    </div>
+                    <div class="blockchain-metric">
+                        <div class="blockchain-value">99.9%</div>
+                        <div class="blockchain-label">Uptime</div>
+                    </div>
+                    <div class="blockchain-metric">
+                        <div class="blockchain-value">2.3s</div>
+                        <div class="blockchain-label">Avg Block Time</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Grid -->
+    <div class="dashboard-stats">
+        <div class="row g-4">
+            {% if user_role == 'admin' %}
+            <!-- Admin Statistics -->
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users text-primary"></i>
+                    </div>
+                    <div class="stat-number">{{ total_evidence }}</div>
+                    <div class="stat-label">Total System Evidence</div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-user-shield text-danger"></i>
+                    </div>
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">Active Users</div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle text-success"></i>
+                    </div>
+                    <div class="stat-number">{{ verified_count }}</div>
+                    <div class="stat-label">Verified Documents</div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-link text-info"></i>
+                    </div>
+                    <div class="stat-number">{{ blockchain_txns }}</div>
+                    <div class="stat-label">Blockchain Transactions</div>
+                </div>
+            </div>
+            {% else %}
+            <!-- Regular User Statistics -->
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-folder-open text-primary"></i>
+                    </div>
+                    <div class="stat-number">{{ user_evidence_count }}</div>
+                    <div class="stat-label">My Evidence Files</div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle text-success"></i>
+                    </div>
+                    <div class="stat-number">{{ user_verified_count }}</div>
+                    <div class="stat-label">My Verified Documents</div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock text-warning"></i>
+                    </div>
+                    <div class="stat-number">{{ user_evidence_count - user_verified_count }}</div>
+                    <div class="stat-label">Pending Verification</div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-link text-info"></i>
+                    </div>
+                    <div class="stat-number">{{ blockchain_txns }}</div>
+                    <div class="stat-label">Total Transactions</div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Action Cards -->
+    <div class="action-grid">
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <h3 class="action-title">Upload Evidence</h3>
+                    <p class="action-description">
+                        Securely upload and store evidence files with blockchain verification 
+                        and IPFS distributed storage.
+                    </p>
+                    <a href="{{ url_for('upload_evidence') }}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-upload me-2"></i>Upload Now
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3 class="action-title">Verify Evidence</h3>
+                    <p class="action-description">
+                        Verify the authenticity and integrity of evidence files using 
+                        cryptographic hashes and blockchain records.
+                    </p>
+                    <a href="{{ url_for('verify_evidence') }}" class="btn btn-success btn-lg">
+                        <i class="fas fa-shield-alt me-2"></i>Verify Now
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-qrcode"></i>
+                    </div>
+                    <h3 class="action-title">QR Code Scanner</h3>
+                    <p class="action-description">
+                        Scan QR codes for quick evidence verification and instant 
+                        access to document metadata.
+                    </p>
+                    <a href="{{ url_for('scan_qr') }}" class="btn btn-info btn-lg">
+                        <i class="fas fa-camera me-2"></i>Scan QR
+                    </a>
+                </div>
+            </div>
+            
+            {% if user_role == 'admin' %}
+            <div class="col-lg-3 col-md-6">
+                <div class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-users-cog"></i>
+                    </div>
+                    <h3 class="action-title">Admin Panel</h3>
+                    <p class="action-description">
+                        Manage system users, roles, permissions, and system-wide 
+                        settings for the evidence management platform.
+                    </p>
+                    <a href="{{ url_for('manage_users') }}" class="btn btn-danger btn-lg">
+                        <i class="fas fa-cog me-2"></i>Admin Panel
+                    </a>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-lg-3 col-md-6">
+                <div class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="action-title">View Reports</h3>
+                    <p class="action-description">
+                        Access detailed reports and analytics about your evidence 
+                        verification history and blockchain transactions.
+                    </p>
+                    <a href="{{ url_for('audit_trail') }}" class="btn btn-warning btn-lg">
+                        <i class="fas fa-chart-bar me-2"></i>View Reports
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Admin Control Panel -->
+    {% if user_role == 'admin' %}
+    <div class="admin-panel mt-5">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-user-shield me-2"></i>
+                    Administrator Control Panel
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="admin-feature text-center">
+                            <i class="fas fa-users text-danger fa-3x mb-3"></i>
+                            <h5>User Management</h5>
+                            <p>Create, modify, and manage user accounts and permissions.</p>
+                            <a href="{{ url_for('manage_users') }}" class="btn btn-outline-danger">
+                                <i class="fas fa-users me-1"></i> Manage Users
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="admin-feature text-center">
+                            <i class="fas fa-chart-bar text-warning fa-3x mb-3"></i>
+                            <h5>System Statistics</h5>
+                            <p>Monitor system performance, user activity, and blockchain metrics.</p>
+                            <a href="{{ url_for('admin_system_stats') }}" class="btn btn-outline-warning">
+                                <i class="fas fa-chart-bar me-1"></i> View Statistics
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="admin-feature text-center">
+                            <i class="fas fa-history text-info fa-3x mb-3"></i>
+                            <h5>User Activity</h5>
+                            <p>Track user engagement, evidence uploads, and system usage patterns.</p>
+                            <a href="{{ url_for('admin_user_activity') }}" class="btn btn-outline-info">
+                                <i class="fas fa-history me-1"></i> View Activity
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Recent Activity -->
+    <div class="recent-activity">
+        <h3 class="mb-4">
+            <i class="fas fa-history me-2 text-primary"></i>
+            Recent Activity
+        </h3>
+        
+        <!-- Evidence Status Overview -->
+        {% if evidence_status %}
+        <div class="evidence-status-section mb-4">
+            <h4 class="mb-3">
+                <i class="fas fa-chart-pie me-2 text-info"></i>
+                Evidence Status Overview
+            </h4>
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <div class="status-card status-valid">
+                        <div class="status-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="status-number">{{ evidence_status.valid }}</div>
+                        <div class="status-label">Valid</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="status-card status-invalid">
+                        <div class="status-icon">
+                            <i class="fas fa-times-circle"></i>
+                        </div>
+                        <div class="status-number">{{ evidence_status.invalid }}</div>
+                        <div class="status-label">Invalid</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="status-card status-fake">
+                        <div class="status-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="status-number">{{ evidence_status.fake }}</div>
+                        <div class="status-label">Fake</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="status-card status-pending">
+                        <div class="status-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="status-number">{{ evidence_status.pending }}</div>
+                        <div class="status-label">Pending</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Recent Evidence Activity -->
+        {% if recent_evidence %}
+        <div class="recent-evidence-section mb-4">
+            <h4 class="mb-3">
+                <i class="fas fa-file-alt me-2 text-success"></i>
+                Recent Evidence Activity
+            </h4>
+            <div class="evidence-activity-list">
+                {% for evidence in recent_evidence %}
+                <div class="evidence-activity-item">
+                    <div class="activity-icon">
+                        {% if evidence.verification_status == 'valid' %}
+                            <i class="fas fa-check-circle text-success"></i>
+                        {% elif evidence.verification_status == 'invalid' %}
+                            <i class="fas fa-times-circle text-danger"></i>
+                        {% elif evidence.verification_status == 'fake' %}
+                            <i class="fas fa-exclamation-triangle text-warning"></i>
+                        {% else %}
+                            <i class="fas fa-clock text-info"></i>
+                        {% endif %}
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title">
+                            {{ evidence.filename }} 
+                            <span class="badge bg-{{ 'success' if evidence.verification_status == 'valid' else 'danger' if evidence.verification_status == 'invalid' else 'warning' if evidence.verification_status == 'fake' else 'secondary' }}">
+                                {{ evidence.verification_status|title }}
+                            </span>
+                        </div>
+                        <div class="activity-details">
+                            <small class="text-muted">
+                                Uploaded by {{ evidence.uploader }} • {{ evidence.upload_timestamp }}
+                                {% if evidence.verified_by %}
+                                    • Verified by {{ evidence.verified_by }}
+                                {% endif %}
+                            </small>
+                        </div>
+                        {% if evidence.verification_notes %}
+                        <div class="verification-notes mt-1">
+                            <small class="text-muted">
+                                <i class="fas fa-sticky-note me-1"></i>{{ evidence.verification_notes }}
+                            </small>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <div class="activity-item">
+            <div class="activity-icon">
+                <i class="fas fa-upload"></i>
+            </div>
+            <div class="activity-content">
+                <div class="activity-title">Evidence uploaded successfully</div>
+                <div class="activity-time">2 minutes ago</div>
+            </div>
+        </div>
+        
+        <div class="activity-item">
+            <div class="activity-icon">
+                <i class="fas fa-check"></i>
+            </div>
+            <div class="activity-content">
+                <div class="activity-title">Document verification completed</div>
+                <div class="activity-time">15 minutes ago</div>
+            </div>
+        </div>
+        
+        <div class="activity-item">
+            <div class="activity-icon">
+                <i class="fas fa-qrcode"></i>
+            </div>
+            <div class="activity-content">
+                <div class="activity-title">QR code generated for evidence #EV001</div>
+                <div class="activity-time">1 hour ago</div>
+            </div>
+        </div>
+        
+        <div class="activity-item">
+            <div class="activity-icon">
+                <i class="fas fa-user-plus"></i>
+            </div>
+            <div class="activity-content">
+                <div class="activity-title">New user account created</div>
+                <div class="activity-time">3 hours ago</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Auto-refresh dashboard stats every 30 seconds
+    setInterval(function() {
+        // Add subtle indicator that data is being refreshed
+        const indicators = document.querySelectorAll('.status-indicator');
+        indicators.forEach(indicator => {
+            indicator.style.animation = 'none';
+            setTimeout(() => {
+                indicator.style.animation = 'pulse 2s infinite';
+            }, 100);
+        });
+    }, 30000);
+
+    // Add number counting animation
+    document.addEventListener('DOMContentLoaded', function() {
+        const numbers = document.querySelectorAll('.stat-number');
+        numbers.forEach(number => {
+            const target = parseInt(number.textContent);
+            let current = 0;
+            const increment = target / 20;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                number.textContent = Math.floor(current);
+            }, 50);
+        });
+    });
+</script>
+{% endblock %}

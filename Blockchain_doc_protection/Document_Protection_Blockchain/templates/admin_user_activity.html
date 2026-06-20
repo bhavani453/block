@@ -1,0 +1,294 @@
+{% extends "base.html" %}
+
+{% block title %}User Activity - Admin Panel{% endblock %}
+
+{% block extra_css %}
+<style>
+    .user-activity-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border-color);
+        transition: all 0.3s ease;
+    }
+
+    .user-activity-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.15);
+    }
+
+    .user-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary-blue), var(--secondary-teal));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        margin-right: 1rem;
+        flex-shrink: 0;
+    }
+
+    .user-info h5 {
+        margin-bottom: 0.25rem;
+        font-weight: 600;
+    }
+
+    .user-role {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+    }
+
+    .activity-metrics {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .metric {
+        text-align: center;
+        padding: 0.75rem;
+        background: rgba(102, 126, 234, 0.05);
+        border-radius: 10px;
+    }
+
+    .metric-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary-blue);
+        display: block;
+    }
+
+    .metric-label {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        margin-top: 0.25rem;
+    }
+
+    .last-activity {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        margin-top: 0.5rem;
+    }
+
+    .activity-status {
+        display: inline-flex;
+        align-items: center;
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 12px;
+        font-weight: 500;
+    }
+
+    .status-active {
+        background: rgba(25, 135, 84, 0.1);
+        color: var(--success-color);
+    }
+
+    .status-inactive {
+        background: rgba(108, 117, 125, 0.1);
+        color: var(--text-secondary);
+    }
+
+    .filters {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border-color);
+    }
+
+    .summary-stats {
+        background: linear-gradient(135deg, var(--primary-blue), var(--secondary-teal));
+        color: white;
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+    }
+
+    .summary-item {
+        text-align: center;
+    }
+
+    .summary-value {
+        font-size: 2rem;
+        font-weight: 700;
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    .summary-label {
+        font-size: 0.9rem;
+        opacity: 0.9;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Summary Statistics -->
+<div class="summary-stats">
+    <h3 class="mb-0"><i class="fas fa-chart-line me-2"></i>User Activity Dashboard</h3>
+    <p class="mb-0 opacity-75">Monitor user engagement and system usage patterns</p>
+
+    <div class="summary-grid">
+        <div class="summary-item">
+            <span class="summary-value">{{ user_activity|length }}</span>
+            <div class="summary-label">Total Users</div>
+        </div>
+        <div class="summary-item">
+            <span class="summary-value">
+                {% set total_evidence = 0 %}
+                {% for activity in user_activity.values() %}
+                    {% set total_evidence = total_evidence + activity.evidence_count %}
+                {% endfor %}
+                {{ total_evidence }}
+            </span>
+            <div class="summary-label">Total Evidence Files</div>
+        </div>
+        <div class="summary-item">
+            <span class="summary-value">
+                {% set total_verified = 0 %}
+                {% for activity in user_activity.values() %}
+                    {% set total_verified = total_verified + activity.verified_count %}
+                {% endfor %}
+                {{ total_verified }}
+            </span>
+            <div class="summary-label">Verified Documents</div>
+        </div>
+        <div class="summary-item">
+            <span class="summary-value">
+                {% set total_audit = 0 %}
+                {% for activity in user_activity.values() %}
+                    {% set total_audit = total_audit + activity.audit_entries %}
+                {% endfor %}
+                {{ total_audit }}
+            </span>
+            <div class="summary-label">Audit Entries</div>
+        </div>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="filters">
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <h5 class="mb-0"><i class="fas fa-filter me-2"></i>User Activity Details</h5>
+        </div>
+        <div class="col-md-6 text-end">
+            <button class="btn btn-outline-primary btn-sm" onclick="exportUserData()">
+                <i class="fas fa-download me-1"></i>Export Data
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- User Activity List -->
+<div class="user-activity-list">
+    {% for username, activity in user_activity.items() %}
+    <div class="user-activity-card">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <div class="d-flex align-items-center">
+                    <div class="user-avatar">
+                        {{ username[0].upper() }}
+                    </div>
+                    <div class="user-info">
+                        <h5>{{ username }}</h5>
+                        <div class="user-role">
+                            {% if username == 'admin' %}
+                                <span class="badge bg-danger">Administrator</span>
+                            {% elif username == 'Anand' %}
+                                <span class="badge bg-primary">Investigator</span>
+                            {% else %}
+                                <span class="badge bg-secondary">User</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="activity-metrics">
+                    <div class="metric">
+                        <span class="metric-value">{{ activity.evidence_count }}</span>
+                        <div class="metric-label">Evidence Files</div>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">{{ activity.verified_count }}</span>
+                        <div class="metric-label">Verified</div>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">{{ activity.audit_entries }}</span>
+                        <div class="metric-label">Activities</div>
+                    </div>
+                </div>
+
+                <div class="last-activity">
+                    <i class="fas fa-clock me-1"></i>
+                    Last Activity: {{ activity.last_activity }}
+                    {% if activity.audit_entries > 0 %}
+                        <span class="activity-status status-active ms-2">
+                            <i class="fas fa-circle me-1"></i>Active
+                        </span>
+                    {% else %}
+                        <span class="activity-status status-inactive ms-2">
+                            <i class="fas fa-circle me-1"></i>Inactive
+                        </span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Back to Admin Panel -->
+<div class="text-center mt-4">
+    <a href="{{ url_for('admin_system_stats') }}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Back to System Statistics
+    </a>
+    <a href="{{ url_for('manage_users') }}" class="btn btn-primary ms-2">
+        <i class="fas fa-users me-2"></i>Manage Users
+    </a>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function exportUserData() {
+        alert('Export functionality will be available in the next update.');
+    }
+
+    // Add animation to metric values
+    document.addEventListener('DOMContentLoaded', function() {
+        const metrics = document.querySelectorAll('.metric-value');
+        metrics.forEach(metric => {
+            const target = parseInt(metric.textContent);
+            let current = 0;
+            const increment = target / 20;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                metric.textContent = Math.floor(current);
+            }, 50);
+        });
+    });
+</script>
+{% endblock %}
